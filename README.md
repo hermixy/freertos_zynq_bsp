@@ -9,12 +9,14 @@ The demo files of `CORTEX_A9_Zynq_ZC702` are available from official svn or via 
 
 ## supported drivers
 
-currently we aiming at `freertos` and `lwip141` only.
+currently we aiming at `freertos` and `lwip140`, `lwip141` only.
 
 ## Instructions
 
 Open SDK, and set repository via `Xilinx Tools`, `Repositories` and add (new) the location of the cloned source code.
 
 Open `File`, `New Project`, add the demos, compile and run.
+
+## changelog
 
 
