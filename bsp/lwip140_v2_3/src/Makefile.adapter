@@ -3,27 +3,27 @@ include Makefile.config
 PORT = contrib/ports/xilinx
 
 COMMON_SRCS=$(PORT)/netif/xpqueue.c \
-			$(PORT)/netif/xadapter.c \
-	      	$(PORT)/netif/xtopology_g.c
+            $(PORT)/netif/xadapter.c \
+            $(PORT)/netif/xtopology_g.c
 
 EMACLITE_SRCS = $(PORT)/netif/xemacliteif.c
 
 TEMAC_SRCS =$(PORT)/netif/xlltemacif_hw.c \
-	     	$(PORT)/netif/xlltemacif_physpeed.c \
-	     	$(PORT)/netif/xlltemacif_fifo.c \
-	     	$(PORT)/netif/xlltemacif_sdma.c \
-	     	$(PORT)/netif/xlltemacif.c
+            $(PORT)/netif/xlltemacif_physpeed.c \
+            $(PORT)/netif/xlltemacif_fifo.c \
+            $(PORT)/netif/xlltemacif_sdma.c \
+            $(PORT)/netif/xlltemacif.c
 
 AXI_ETHERNET_SRCS = $(PORT)/netif/xaxiemacif_hw.c \
-	     			$(PORT)/netif/xaxiemacif_physpeed.c \
-	     			$(PORT)/netif/xaxiemacif.c
+                    $(PORT)/netif/xaxiemacif_physpeed.c \
+                    $(PORT)/netif/xaxiemacif.c
 AXI_ETHERNET_FIFO_SRCS = $(PORT)/netif/xaxiemacif_fifo.c
 AXI_ETHERNET_DMA_SRCS = $(PORT)/netif/xaxiemacif_dma.c
 
 PS7_ETHERNET_SRCS = $(PORT)/netif/xemacpsif_hw.c \
-	     			$(PORT)/netif/xemacpsif_physpeed.c \
-	     			$(PORT)/netif/xemacpsif.c \
-	     			$(PORT)/netif/xemacpsif_dma.c
+                    $(PORT)/netif/xemacpsif_physpeed.c \
+                    $(PORT)/netif/xemacpsif.c \
+                    $(PORT)/netif/xemacpsif_dma.c
 
 SYSARCH_SOCKET_SRCS = $(PORT)/sys_arch.c
 
