@@ -9,7 +9,11 @@ The demo files of `CORTEX_A9_Zynq_ZC702` are available from official svn or via 
 
 ## supported drivers
 
-currently we aiming at `freertos` and `lwip140`, `lwip141` only.
+currently we aiming at `freertos` and `lwip` only. TODO list,
+- add FreeRTOS CLI package
+- add other package in the `Demo/common` folder
+- add sw apps to the package
+- add matrix algebra package
 
 ## Instructions
 
@@ -18,5 +22,4 @@ Open SDK, and set repository via `Xilinx Tools`, `Repositories` and add (new) th
 Open `File`, `New Project`, add the demos, compile and run.
 
 ## changelog
-
 

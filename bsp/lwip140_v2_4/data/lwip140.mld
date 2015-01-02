@@ -7,7 +7,7 @@ BEGIN LIBRARY lwip140
   OPTION desc = "lwIP TCP/IP Stack library: lwIP v1.4.0, Xilinx adapter v2.0";
   OPTION app_linker_flags = "-Wl,--start-group,-lxil,-llwip4,-lgcc,-lc,--end-group";
   OPTION requires_os = (standalone xilkernel freertos_zynq);
-  OPTION VERSION = 2.3;
+  OPTION VERSION = 2.4;
   OPTION NAME = lwip140;
 	
   PARAM name = api_mode, desc = "Mode of operation for lwIP (RAW API/Sockets API)", type = enum, values = ("RAW API" = RAW_API, "SOCKET API" = SOCKET_API), default = RAW_API;
@@ -108,6 +108,12 @@ BEGIN LIBRARY lwip140
       	PARAM name = dhcp_options, desc = "Is DHCP required?", type = bool, default = true, permit = none;
       	PARAM name = lwip_dhcp, desc = "Is DHCP required?", type = bool, default = false;
 	PARAM name = dhcp_does_arp_check, desc = "ARP check on offered addresses?", type = bool, default = false;
+  END CATEGORY
+
+  BEGIN CATEGORY ppp_options
+    PROPERTY desc = "lwIP PPP options";
+    PARAM name = ppp_options, desc = "is PPP supported?", type = bool, default = false, permit = none;
+    PARAM name = num_ppp, desc = "MAX PPP sessions", type = int, default = 1;
   END CATEGORY
 
   BEGIN CATEGORY stats_options
