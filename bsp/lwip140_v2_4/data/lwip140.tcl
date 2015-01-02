@@ -615,6 +615,32 @@ proc generate_lwip_opts {libhandle} {
 	puts $lwipopts_fd "\#define DHCP_DOES_ARP_CHECK $dhcp_does_arp_check"
 	puts $lwipopts_fd ""
 
+    # PPP options
+    set lwip_ppp       [expr [get_property CONFIG.ppp_options $libhandle] == true]
+    set num_ppp        [expr [get_property CONFIG.num_ppp $libhandle]]
+    set pppoe_support  [expr [get_property CONFIG.pppoe_support $libhandle] == true]
+    set pppos_support  [expr [get_property CONFIG.pppos_support $libhandle] == true]
+    set pap_support    [expr [get_property CONFIG.pap_support $libhandle] == true]
+    set chap_support   [expr [get_property CONFIG.chap_support $libhandle] == true]
+    set mschap_support [expr [get_property CONFIG.mschap_support $libhandle] == true]
+    set cbcp_support   [expr [get_property CONFIG.cbcp_support $libhandle] == true]
+    set ccp_support    [expr [get_property CONFIG.ccp_support $libhandle] == true]
+    set vj_support     [expr [get_property CONFIG.vj_support $libhandle] == true]
+    set md5_support    [expr [get_property CONFIG.md5_support $libhandle] == true]
+    puts $lwipopts_fd "\#define PPP_SUPPORT $lwip_ppp"
+    puts $lwipopts_fd "\#if PPP_SUPPORT"
+    puts $lwipopts_fd "  \#define NUM_PPP $num_ppp"
+    puts $lwipopts_fd "  \#define PPPOE_SUPPORT $pppoe_support"
+    puts $lwipopts_fd "  \#define PPPOS_SUPPORT $pppos_support"
+    puts $lwipopts_fd "  \#define PAP_SUPPORT $pap_support"
+    puts $lwipopts_fd "  \#define CHAP_SUPPORT $chap_support"
+    puts $lwipopts_fd "  \#define MSCHAP_SUPPORT $mschap_support"
+    puts $lwipopts_fd "  \#define CBCP_SUPPORT $cbcp_support"
+    puts $lwipopts_fd "  \#define CCP_SUPPORT $ccp_support"
+    puts $lwipopts_fd "  \#define VJ_SUPPORT $vj_support"
+    puts $lwipopts_fd "  \#define MD5_SUPPORT $md5_support"
+    puts $lwipopts_fd "\#endif"
+    puts $lwipopts_fd ""
 
 	# temac adapter options
 	set linkspeed [get_property CONFIG.phy_link_speed $libhandle]

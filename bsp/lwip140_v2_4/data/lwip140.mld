@@ -112,8 +112,17 @@ BEGIN LIBRARY lwip140
 
   BEGIN CATEGORY ppp_options
     PROPERTY desc = "lwIP PPP options";
-    PARAM name = ppp_options, desc = "is PPP supported?", type = bool, default = false, permit = none;
+    PARAM name = ppp_options, desc = "currently PPP is not supported", type = bool, default = false, permit = none;
     PARAM name = num_ppp, desc = "MAX PPP sessions", type = int, default = 1;
+    PARAM name = pppoe_support, desc = "", type = bool, default = true;
+    PARAM name = pppos_support, desc = "", type = bool, default = true;
+    PARAM name = pap_support, desc = "set > 0 for PAP", type = bool, default = true;
+    PARAM name = chap_support, desc = "set >0 for CHAP", type = bool, default = true;
+    PARAM name = mschap_support, desc = "set > 0 for MSCHAP, (not functional)", type = bool, default = false;
+    PARAM name = cbcp_support, desc = "set > 0 for CBCP, (not functional)", type = bool, default = false;
+    PARAM name = ccp_support, desc = "set > 0 for CCP, (not functional)", type = bool, default = false;
+    PARAM name = vj_support, desc = "set > 0 for VJ header compression", type = bool, default = true;
+    PARAM name = md5_support, desc = "set > 0 for MD5 (see also CHAP)", type = bool, default = true;
   END CATEGORY
 
   BEGIN CATEGORY stats_options
@@ -122,16 +131,16 @@ BEGIN LIBRARY lwip140
   END CATEGORY
 
   BEGIN CATEGORY debug_options
-      	PARAM name = debug_options, desc = "Turn on lwIP Debug?", type = bool, default = true, permit = none;
-      	PARAM name = lwip_debug, desc = "Turn on lwIP Debug?", type = bool, default = false;
-	PARAM name = ip_debug, desc = "Debug IP layer", type = bool, default = false;
-	PARAM name = tcp_debug, desc = "Debug TCP layer", type = bool, default = false;
-	PARAM name = udp_debug, desc = "Debug UDP layer", type = bool, default = false;
-	PARAM name = icmp_debug, desc = "Debug ICMP protocol", type = bool, default = false;
-	PARAM name = igmp_debug, desc = "Debug IGMP protocol", type = bool, default = false;
-	PARAM name = netif_debug, desc = "Debug network interface layer", type = bool, default = false;
-	PARAM name = sys_debug, desc = "Debug sys arch layer", type = bool, default = false;
-	PARAM name = pbuf_debug, desc = "Debug pbuf layer", type = bool, default = false;
+    PARAM name = debug_options, desc = "Turn on lwIP Debug?", type = bool, default = true, permit = none;
+    PARAM name = lwip_debug, desc = "Turn on lwIP Debug?", type = bool, default = false;
+    PARAM name = ip_debug, desc = "Debug IP layer", type = bool, default = false;
+    PARAM name = tcp_debug, desc = "Debug TCP layer", type = bool, default = false;
+    PARAM name = udp_debug, desc = "Debug UDP layer", type = bool, default = false;
+    PARAM name = icmp_debug, desc = "Debug ICMP protocol", type = bool, default = false;
+    PARAM name = igmp_debug, desc = "Debug IGMP protocol", type = bool, default = false;
+    PARAM name = netif_debug, desc = "Debug network interface layer", type = bool, default = false;
+    PARAM name = sys_debug, desc = "Debug sys arch layer", type = bool, default = false;
+    PARAM name = pbuf_debug, desc = "Debug pbuf layer", type = bool, default = false;
   END CATEGORY
 
 END LIBRARY
