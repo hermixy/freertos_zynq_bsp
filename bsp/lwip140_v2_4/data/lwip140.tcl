@@ -441,7 +441,8 @@ proc generate_lwip_opts {libhandle} {
     puts $lwipopts_fd ""
 
     puts $lwipopts_fd "\#define NO_SYS_NO_TIMERS 1"
-    puts $lwipopts_fd "\#define MEMP_SEPARATE_POOLS 1"
+    # disable MEMP_SEPARATE_POOLS as we are using heap_4.c
+    puts $lwipopts_fd "\#define MEMP_SEPARATE_POOLS 0"
     puts $lwipopts_fd "\#define MEMP_NUM_FRAG_PBUF 256"
     puts $lwipopts_fd "\#define IP_OPTIONS_ALLOWED 0"
     if {$proctype != "ps7_cortexa9"} {
