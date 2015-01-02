@@ -396,7 +396,7 @@ proc generate_lwip_opts {libhandle} {
 
     # workaround for lwip mem_malloc bug
     # puts $lwipopts_fd "\#define MEM_LIBC_MALLOC 1"
-    puts $lwipopts_fd ""
+    # puts $lwipopts_fd ""
 
     if {$proctype != "ps7_cortexa9" || $use_axieth_on_zynq == 1} {
         set tx_full_csum_temp [get_property CONFIG.tcp_ip_tx_checksum_offload $libhandle]
@@ -440,23 +440,22 @@ proc generate_lwip_opts {libhandle} {
     }
     puts $lwipopts_fd ""
 
-    #puts $lwipopts_fd "\#define NO_SYS_NO_TIMERS 1"
-    ##disable MEMP_SEPARATE_POOLS as we are using heap_4.c
-    #puts $lwipopts_fd "\#define MEMP_SEPARATE_POOLS 0"
-    #puts $lwipopts_fd "\#define MEMP_NUM_FRAG_PBUF 256"
-    #puts $lwipopts_fd "\#define IP_OPTIONS_ALLOWED 0"
-    #if {$proctype != "ps7_cortexa9"} {
-    #    puts $lwipopts_fd "\#define TCP_OVERSIZE 0"
-    #} else {
-    #    puts $lwipopts_fd "\#define TCP_OVERSIZE TCP_MSS"
-    #}
-    #if {$proctype != "ps7_cortexa9"} {
-    #    puts $lwipopts_fd "\#define LWIP_COMPAT_MUTEX 1"
-    #    puts $lwipopts_fd "\#define LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT 0"
-    #} else {
-    #    puts $lwipopts_fd "\#define LWIP_COMPAT_MUTEX 0"
-    #    puts $lwipopts_fd "\#define LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT 1"
-    #}
+    puts $lwipopts_fd "\#define NO_SYS_NO_TIMERS 1"
+    puts $lwipopts_fd "\#define MEMP_SEPARATE_POOLS 1"
+    puts $lwipopts_fd "\#define MEMP_NUM_FRAG_PBUF 256"
+    puts $lwipopts_fd "\#define IP_OPTIONS_ALLOWED 0"
+    if {$proctype != "ps7_cortexa9"} {
+        puts $lwipopts_fd "\#define TCP_OVERSIZE 0"
+    } else {
+        puts $lwipopts_fd "\#define TCP_OVERSIZE TCP_MSS"
+    }
+    if {$proctype != "ps7_cortexa9"} {
+        puts $lwipopts_fd "\#define LWIP_COMPAT_MUTEX 1"
+        puts $lwipopts_fd "\#define LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT 0"
+    } else {
+        puts $lwipopts_fd "\#define LWIP_COMPAT_MUTEX 0"
+        puts $lwipopts_fd "\#define LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT 1"
+    }
     puts $lwipopts_fd ""
 
     set jumbo_frames [get_property CONFIG.temac_use_jumbo_frames $libhandle]
