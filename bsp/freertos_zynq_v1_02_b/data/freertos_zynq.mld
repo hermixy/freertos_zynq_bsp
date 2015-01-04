@@ -58,12 +58,12 @@
 # within the industry and is intended to ensure information accuracy).
 #
 
-OPTION psf_version = 2.1.0 ; 
-BEGIN OS freertos_zynq 
-		
-  OPTION DRC = FreeRTOS_drc ; 
+OPTION psf_version = 2.1.0 ;
+BEGIN OS freertos_zynq
+
+  OPTION DRC = FreeRTOS_drc ;
   OPTION supported_peripherals = ps7_cortexa9;
-  OPTION COPYFILES = all;	
+  OPTION COPYFILES = all;
   OPTION DEPENDS = (standalone_v4_2);
   #OPTION requires_os = (standalone xilkernel);
   #OPTION APP_COMPILER_FLAGS = "-D__USE_AMP__";
@@ -76,41 +76,93 @@ BEGIN OS freertos_zynq
   PARAM name = stdin, type = peripheral_instance, requires_interface = stdin, default=none, desc = "Specify the instance name of the standard input peripheral";
   PARAM name = stdout, type = peripheral_instance, requires_interface = stdout, default=none, desc = "Specify the instance name of the standard output peripheral";
 
+  # kernel behavior
   BEGIN CATEGORY kernel_behavior
     PARAM name = kernel_behavior, type = bool, default = true, desc = "Parameters relating to the kernel behavior", permit = user;
-    PARAM name = use_preemption, type = bool, default = true, desc = "Set to true to use the preemptive scheduler, or false to use the cooperative scheduler.";
-    PARAM name = tick_rate, type = int, default = 200, desc = "Number of ticks per sec";
-    PARAM name = idle_yield, type = bool, default = true, desc = "Set to true if the Idle task should yield if another idle priority task is able to run, or false if the idle task should always use its entire time slice unless it is preempted.";
-    PARAM name = max_priorities, type = int, default = 4, desc = "The number of task priorities that will be available.  Priorities can be assigned from zero to (max_priorities - 1)";
-    PARAM name = minimal_stack_size, type = int, default = 120, desc = "The size of the stack allocated to the Idle task. Also used by standard demo and test tasks found in the main FreeRTOS download.";
-    PARAM name = total_heap_size, type = int, default = 65536, desc = "Only used if heap_1.c or heap_2.c is included in the project.  Sets the amount of RAM reserved for use by the kernel - used when tasks, queues and semaphores are created.";
-    PARAM name = max_task_name_len, type = int, default = 8, desc = "The maximum number of characters that can be in the name of a task.";
+    PARAM name = max_api_call_interrupt_priority, type = int, default = 18, desc = "Interrupts that are assigned a priority at or below configMAX_API_CALL_INTERRUPT_PRIORITY can call FreeRTOS safe API functions and will nest";
+    PARAM name = cpu_clock_hz, type = int, default = 100000000, desc = "default clock frequency";
+    PARAM name = tick_rate_hz, type = int, default = 1000, desc = "";
+    PARAM name = peripheral_clock_hz, type = int, default = 33333000, desc = "";
+    PARAM name = max_priorities, type = int, default = 7, desc = "The number of task priorities that will be available.  Priorities can be assigned from zero to (max_priorities - 1)";
+    PARAM name = minimal_stack_size, type = int, default = 200, desc = "The size of the stack allocated to the Idle task. Also used by standard demo and test tasks found in the main FreeRTOS download.";
+    PARAM name = total_heap_size, type = int, default = 80, desc = "(Kb) num*1024, Only used if heap_1.c or heap_2.c is included in the project.  Sets the amount of RAM reserved for use by the kernel - used when tasks, queues and semaphores are created.";
+    PARAM name = max_task_name_len, type = int, default = 10, desc = "The maximum number of characters that can be in the name of a task.";
+    PARAM name = queue_registry_size, type = int, default = 8, desc = "The maximum number of queues that can be registered at any one time. Registered queues can be viewed in the kernel aware debugger plug-in.";
+    PARAM name = check_for_stack_overflow, type = int, default = 2, desc = "Set to 1 to include basic run time task stack checking.  Set to 2 to include more comprehensive run time task stack checking.";
+    PARAM name = idle_should_yield, type = bool, default = true, desc = "Set to true if the Idle task should yield if another idle priority task is able to run, or false if the idle task should always use its entire time slice unless it is preempted.";
   END CATEGORY
 
+  # kernel features
   BEGIN CATEGORY kernel_features
     PARAM name = kernel_features, type = bool, default = true, desc = "Include or exclude kernel features", permit = user;
+    PARAM name = use_preemption, type = bool, default = true, desc = "Set to true to use the preemptive scheduler, or false to use the cooperative scheduler.";
     PARAM name = use_mutexes, type = bool, default = true, desc = "Set to true to include mutex functionality, or false to exclude mutex functionality.";
     PARAM name = use_recursive_mutexes, type = bool, default = true, desc = "Set to true to include recursive mutex functionality, or false to exclude recursive mutex functionality.";
     PARAM name = use_counting_semaphores, type = bool, default = true, desc = "Set to true to include counting semaphore functionality, or false to exclude recursive mutex functionality.";
-    PARAM name = queue_registry_size, type = int, default = 10, desc = "The maximum number of queues that can be registered at any one time. Registered queues can be viewed in the kernel aware debugger plug-in.";
+    PARAM name = use_queue_sets, type = bool, default = true, desc = "";
+    PARAM name = use_stats_formatting_functions, type = bool, default = true, desc = "format the raw data provided by the uxTaskGetSystemState() function in to human readable ASCII form.  See the notes in the implementation of vTaskList() within FreeRTOS/Source/tasks.c for limitations.";
+    PARAM name = use_port_optimised_task_selection, type = bool, default = true, desc = "";
+    PARAM name = use_tickless_idle, type = bool, default = false, desc = "";
     PARAM name = use_trace_facility, type = bool, default = true, desc = "Set to true to include the legacy trace functionality, and a few other features.  traceMACROS are the preferred method of tracing now.";
+    PARAM name = use_16_bit_ticks, type = bool, default = false, desc = "";
   END CATEGORY
 
-  BEGIN CATEGORY hook_functions
-    PARAM name = hook_functions, type = bool, default = true, desc = "Include or exclude application defined hook (callback) functions.  Callback functions must be defined by the application that is using FreeRTOS", permit = user;
-    PARAM name = use_idle_hook, type = bool, default = false, desc = "Set to true for the kernel to call vApplicationIdleHook() on each iteration of the idle task.  The application must provide an implementation of vApplicationIdleHook().";
-    PARAM name = use_tick_hook, type = bool, default = false, desc = "Set to true for the kernel to call vApplicationTickHook() during each tick interrupt.  The application must provide an implementation of vApplicationTickHook().";
-    PARAM name = use_malloc_failed_hook, type = bool, default = true, desc = "Only used if heap_1.c, heap_2.c or heap_3.c is included in the project.  Set to true for the kernel to call vApplicationMallocFailedHookHook() if there is insufficient FreeRTOS heap available for a task, queue or semaphore to be created.  The application must provide an implementation of vApplicationMallocFailedHook().";
-    PARAM name = check_for_stack_overflow, type = int, default = 2, desc = "Set to 1 to include basic run time task stack checking.  Set to 2 to include more comprehensive run time task stack checking.";
+  # hardware
+  BEGIN CATEGORY hardware_options
+    PARAM name = hardware_options, type = bool, default = true, desc = "The application must provide a function that configures a peripheral to create the FreeRTOS tick interrupt, then define configSETUP_TICK_INTERRUPT() in FreeRTOSConfig.h to call the function.  This file contains a function that is suitable for use on the Zynq MPU. ", permit = none;
+    PARAM name = interrupt_controller_base_address, type = string, default = "( XPAR_PS7_SCUGIC_0_DIST_BASEADDR )", desc = "do not alter for Zynq MPU";
+    PARAM name = interrupt_controller_cpu_interface_offset, type = string, default = "( -0xf00 )", desc = "do not alter for Zynq MPU";
+    PARAM name = unique_interrupt_priorities, type = int, default = 32, desc = "do not alter for Zynq MPU";
   END CATEGORY
 
+  # co-routines
+  BEGIN CATEGORY co_routines
+    PARAM name = co_routines, type = bool, default = false, desc = "use co-routines", permit = user;
+    PARAM name = use_co_routines, type = bool, default = false, desc = "";
+    PARAM name = max_co_routine_priorities, type = int, default = 2, desc = "";
+  END CATEGORY
+
+  # timers and watchdogs
   BEGIN CATEGORY software_timers
-    PARAM name = software_timers, type = bool, default = true, desc = "Options relating to the software timers functionality", permit = user;
+    PARAM name = software_timers, typE = bool, default = true, desc = "Options relating to the software timers functionality", permit = user;
     PARAM name = use_timers, type = bool, default = true, desc = "Set to true to include software timer functionality, or false to exclude software timer functionality";
     PARAM name = timer_task_priority, type = string, default = "(configMAX_PRIORITIES - 1)", desc = "The priority at which the software timer service/daemon task will execute.";
-    PARAM name = timer_command_queue_length, type = int, default = 10, desc = "The number of commands the timer command queue can hold at any one time.";
-    PARAM name = timer_task_stack_depth, type = string, default = "(configMINIMAL_STACK_SIZE), desc = "The size of the stack allocated to the timer service/daemon task.";
+    PARAM name = timer_queue_length, type = int, default = 5, desc = "The number of commands the timer command queue can hold at any one time.";
+    PARAM name = timer_task_stack_depth, type = string, default = "(configMINIMAL_STACK_SIZE * 2)", desc = "The size of the stack allocated to the timer service/daemon task.";
+    PARAM name = generate_run_time_stats, type = bool, default = true, desc = "private watchdog is used to generate run time stats, must define vInitialiseTimerForRunTimeStats() in application";
+    PARAM name = command_int_max_output_size, type = int, default = 2096, desc = "The size of the global output buffer that is available for use when there are multiple command interpreters running at once (for example, one on a UART and one on TCP/IP).  This is done to prevent an output buffer being defined by each implementation - which would waste RAM.  In this case, there is only one command interpreter running.";
   END CATEGORY
 
+  # hooks
+  BEGIN CATEGORY hook_functions
+    PARAM name = hook_functions, type = bool, default = true, desc = "Include or exclude application defined hook (callback) functions.  Callback functions must be defined by the application that is using FreeRTOS", permit = user;
+    PARAM name = use_malloc_failed_hook, type = bool, default = true, desc = "Only used if heap_1.c, heap_2.c or heap_3.c is included in the project.  Set to true for the kernel to call vApplicationMallocFailedHookHook() if there is insufficient FreeRTOS heap available for a task, queue or semaphore to be created.  The application must provide an implementation of vApplicationMallocFailedHook().";
+    PARAM name = use_application_task_tag, type = bool, default = false, desc = "";
+    PARAM name = use_idle_hook, type = bool, default = true, desc = "Set to true for the kernel to call vApplicationIdleHook() on each iteration of the idle task.  The application must provide an implementation of vApplicationIdleHook().";
+    PARAM name = use_tick_hook, type = bool, default = true, desc = "Set to true for the kernel to call vApplicationTickHook() during each tick interrupt.  The application must provide an implementation of vApplicationTickHook().";
+  END CATEGORY
+
+  # interface with lwip
+  BEGIN CATEGORY network_options
+    PARAM name = network_options, type = bool, default = true, desc = "Network configuration settings - only used when the lwIP example is built.", permit = user;
+    PARAM name = mac_input_task_priority, type = string, default = "( configMAX_PRIORITIES - 1 )", desc = "The priority for the task that unblocked by the MAC interrupt to process received packets";
+    PARAM name = lwip_task_priority, type = string, default = "( configMAX_PRIORITIES - 2 )", desc = " The priority of the task that runs the lwIP stack.";
+    PARAM name = cli_task_priority, type = string, default = "( tskIDLE_PRIORITY )", desc = "The priority of the task that uses lwIP sockets to provide a simple command line interface";
+    PARAM name = mac_addr0, type = string, default = "0x00", desc "";
+    PARAM name = mac_addr1, type = string, default = "0x13", desc "";
+    PARAM name = mac_addr2, type = string, default = "0x14", desc "";
+    PARAM name = mac_addr3, type = string, default = "0x15", desc "";
+    PARAM name = mac_addr4, type = string, default = "0x15", desc "";
+    PARAM name = mac_addr5, type = string, default = "0x16", desc "";
+    PARAM name = ip_addr0, type = int, default = 172, desc = "";
+    PARAM name = ip_addr1, type = int, default = 25, desc = "";
+    PARAM name = ip_addr2, type = int, default = 218, desc = "";
+    PARAM name = ip_addr3, type = int, default = 200, desc = "";
+    PARAM name = net_mask0, type = int, default = 255, desc = "";
+    PARAM name = net_mask1, type = int, default = 255, desc = "";
+    PARAM name = net_mask2, type = int, default = 255, desc = "";
+    PARAM name = net_mask3, type = int, default = 0, desc = "";
+  END CATEGORY
 END OS
 
+##
