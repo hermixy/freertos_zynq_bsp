@@ -6,7 +6,7 @@
 #
 # This file is free software; you can redistribute it and/or modify it under
 # the terms of the GNU General Public License (version 2) as published by the
-# Free Software Foundation AND MODIFIED BY the FreeRTOS exception 
+# Free Software Foundation AND MODIFIED BY the FreeRTOS exception
 # (see text further below).
 #
 # This file is distributed in the hope that it will be useful, but
@@ -17,7 +17,7 @@
 # You should have received a copy of the GNU General Public License; if not it
 # can be viewed here: <http://www.gnu.org/licenses/>
 #
-# The following exception language was found at 
+# The following exception language was found at
 # http://www.freertos.org/a00114.html on May 8, 2012.
 #
 # GNU General Public License Exception
@@ -183,6 +183,31 @@ proc generate {os_handle} {
 
     puts $config_file "\#include \"xparameters.h\""
     puts $config_file ""
+
+    puts $config_file "/*
+* The FreeRTOS Cortex-A port implements a full interrupt nesting model.
+*
+* Interrupts that are assigned a priority at or below
+* configMAX_API_CALL_INTERRUPT_PRIORITY (which counter-intuitively in the ARM
+* generic interrupt controller \[GIC\] means a priority that has a numerical
+* value above configMAX_API_CALL_INTERRUPT_PRIORITY) can call FreeRTOS safe API
+* functions and will nest.
+*
+* Interrupts that are assigned a priority above
+* configMAX_API_CALL_INTERRUPT_PRIORITY (which in the GIC means a numerical
+* value below configMAX_API_CALL_INTERRUPT_PRIORITY) cannot call any FreeRTOS
+* API functions, will nest, and will not be masked by FreeRTOS critical
+* sections (although it is necessary for interrupts to be globally disabled
+* extremely briefly as the interrupt mask is updated in the GIC).
+*
+* FreeRTOS functions that can be called from an interrupt are those that end in
+* \"FromISR\".  FreeRTOS maintains a separate interrupt safe API to enable
+* interrupt entry to be shorter, faster, simpler and smaller.
+*
+* The Zynq implements 256 unique interrupt priorities.  For the purpose of
+* setting configMAX_API_CALL_INTERRUPT_PRIORITY 255 represents the lowest
+* priority.
+*/"
 
     set max_api_call_interrupt_priority [get_property CONFIG.max_api_call_interrupt_priority $os_handle]
     puts $config_file "\#define configMAX_API_CALL_INTERRUPT_PRIORITY $max_api_call_interrupt_priority \n"
