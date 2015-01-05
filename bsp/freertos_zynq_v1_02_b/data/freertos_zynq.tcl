@@ -325,8 +325,11 @@ proc generate {os_handle} {
 
     # Normal assert() semantics without relying on the provision of an assert.h
     # header file.
-    puts $config_file "void vAssertCalled( const char * pcFile, unsigned long ulLine );"
-    puts $config_file "\#define configASSERT( x ) if( ( x ) == 0 ) vAssertCalled( __FILE__, __LINE__ );"
+    set config_assert [expr [get_property CONFIG.config_assert $os_handle] == true]
+    if {$config_assert == 1} {
+        puts $config_file "void vAssertCalled( const char * pcFile, unsigned long ulLine );"
+        puts $config_file "\#define configASSERT( x ) if( ( x ) == 0 ) vAssertCalled( __FILE__, __LINE__ );"
+    }
 
     # If configTASK_RETURN_ADDRESS is not defined then a task that attempts to
     # return from its implementing function will end up in a "task exit error"

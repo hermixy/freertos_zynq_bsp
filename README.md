@@ -7,13 +7,15 @@ The zynq bsp for freeRTOS, using the cutting-edge version of freeRTOS (currently
 
 The demo files of `CORTEX_A9_Zynq_ZC702` are available from official svn or via [freertos sync at github](https://github.com/cjlano/freertos). The building instructions on ZC702 can be found at the official freeRTOS website [RTOS-Xilinx-Zynq](http://www.freertos.org/RTOS-Xilinx-Zynq.html).
 
+This bsp aims to illustrate the basis of freertos by porting all the common demos, and also support microzed hardware (zynq-based) and lwip capabilities.
+
 ## supported drivers
 
 currently we aiming at `freertos` and `lwip` only. TODO list,
-- add FreeRTOS CLI package
-- add other package in the `Demo/common` folder
-- add sw apps to the package
-- add matrix algebra package
+- **add** FreeRTOS CLI package
+- **add** other demos and sw apps in the `Demo/common` folder
+- **add** board-aware (like LED toggling, buttons etc.,) to the package
+- **add** matrix algebra package
 
 ## Instructions
 
@@ -22,4 +24,5 @@ Open SDK, and set repository via `Xilinx Tools`, `Repositories` and add (new) th
 Open `File`, `New Project`, add the demos, compile and run.
 
 ## changelog
+
 

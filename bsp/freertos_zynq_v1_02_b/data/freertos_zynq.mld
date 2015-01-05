@@ -91,6 +91,7 @@ BEGIN OS freertos_zynq
     PARAM name = queue_registry_size, type = int, default = 8, desc = "The maximum number of queues that can be registered at any one time. Registered queues can be viewed in the kernel aware debugger plug-in.";
     PARAM name = check_for_stack_overflow, type = int, default = 2, desc = "Set to 1 to include basic run time task stack checking.  Set to 2 to include more comprehensive run time task stack checking.";
     PARAM name = idle_should_yield, type = bool, default = true, desc = "Set to true if the Idle task should yield if another idle priority task is able to run, or false if the idle task should always use its entire time slice unless it is preempted.";
+    PARAM name = config_assert, type = bool, default = true, desc = "An assertion is triggered if the parameter passed into configASSERT() is zero. When the application is stable the additional overhead can be removed by simply commenting out the configASSERT() definition in FreeRTOSConfig.h."
   END CATEGORY
 
   # kernel features
