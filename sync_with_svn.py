@@ -42,11 +42,13 @@ f = path.join(source,"FreeRTOS/Demo/CORTEX_A9_Zynq_ZC702/RTOSDemo/src/FreeRTOS_a
 print f
 copy(f, dest_srcs)
 
+# patch entry point
 # we patch the vector table
 fp = path.join(dest,r"bsp/freertos_zynq_v1_02_b/src/Source/portable/GCC/Zynq/FreeRTOS_asm_vectors.S")
 with open(fp, "rU") as fid:
     lines = fid.readlines()
 entry_string = '.global _freertos_vector_table'
+# open using "wb" to exclude WINDOWS \r\n endings
 with open(fp, "wb") as fid:
     for line in lines:
         fid.write(line)
@@ -65,12 +67,14 @@ copy(f, dest_srcs)
 ######## lwIP #########
 srcs = path.join(source, r'FreeRTOS/Demo/Common/ethernet/lwip-1.4.0/')
 dest_srcs = path.join(dest, r'bsp/lwip140_v2_4/src/lwip-1.4.0/')
+# warning, delete tree before copy !
 if path.exists(dest_srcs):
     rmtree(dest_srcs)
 copytree(srcs, dest_srcs, ignore=ignore_patterns('ports'))
 
 srcs = path.join(source, r'FreeRTOS/Demo/CORTEX_A9_Zynq_ZC702/RTOSDemo/src/lwIP_Demo/lwIP_port')
 dest_srcs = path.join(dest, r'bsp/lwip140_v2_4/src/contrib/ports/xilinx')
+# warning, delete tree before copy !
 if path.exists(dest_srcs):
     rmtree(dest_srcs)
 copytree(srcs, dest_srcs)
@@ -80,5 +84,4 @@ dest_srcs = path.join(dest, 'bsp/freertos_cli_v1_04/src/Source')
 for f in glob.glob(path.join(source, "FreeRTOS-Plus/Source/FreeRTOS-Plus-CLI/*")):
     print f
     copy(f, dest_srcs)
-
 
