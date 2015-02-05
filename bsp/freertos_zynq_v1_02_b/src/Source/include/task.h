@@ -1,5 +1,5 @@
 /*
-    FreeRTOS V8.2.0rc1 - Copyright (C) 2014 Real Time Engineers Ltd.
+    FreeRTOS V8.2.0 - Copyright (C) 2015 Real Time Engineers Ltd.
     All rights reserved
 
     VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
@@ -10,26 +10,17 @@
     the terms of the GNU General Public License (version 2) as published by the
     Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
 
+	***************************************************************************
     >>!   NOTE: The modification to the GPL is included to allow you to     !<<
     >>!   distribute a combined work that includes FreeRTOS without being   !<<
     >>!   obliged to provide the source code for proprietary components     !<<
     >>!   outside of the FreeRTOS kernel.                                   !<<
+	***************************************************************************
 
     FreeRTOS is distributed in the hope that it will be useful, but WITHOUT ANY
     WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
     FOR A PARTICULAR PURPOSE.  Full license text is available on the following
     link: http://www.freertos.org/a00114.html
-
-    1 tab == 4 spaces!
-
-    ***************************************************************************
-     *                                                                       *
-     *    Having a problem?  Start by reading the FAQ "My application does   *
-     *    not run, what could be wrong?".  Have you defined configASSERT()?  *
-     *                                                                       *
-     *    http://www.FreeRTOS.org/FAQHelp.html                               *
-     *                                                                       *
-    ***************************************************************************
 
     ***************************************************************************
      *                                                                       *
@@ -45,35 +36,18 @@
      *                                                                       *
     ***************************************************************************
 
-    ***************************************************************************
-     *                                                                       *
-     *   Investing in training allows your team to be as productive as       *
-     *   possible as early as possible, lowering your overall development    *
-     *   cost, and enabling you to bring a more robust product to market     *
-     *   earlier than would otherwise be possible.  Richard Barry is both    *
-     *   the architect and key author of FreeRTOS, and so also the world's   *
-     *   leading authority on what is the world's most popular real time     *
-     *   kernel for deeply embedded MCU designs.  Obtaining your training    *
-     *   from Richard ensures your team will gain directly from his in-depth *
-     *   product knowledge and years of usage experience.  Contact Real Time *
-     *   Engineers Ltd to enquire about the FreeRTOS Masterclass, presented  *
-     *   by Richard Barry:  http://www.FreeRTOS.org/contact
-     *                                                                       *
-    ***************************************************************************
+    http://www.FreeRTOS.org/FAQHelp.html - Having a problem?  Start by reading
+	the FAQ page "My application does not run, what could be wrong?".  Have you
+	defined configASSERT()?
 
-    ***************************************************************************
-     *                                                                       *
-     *    You are receiving this top quality software for free.  Please play *
-     *    fair and reciprocate by reporting any suspected issues and         *
-     *    participating in the community forum:                              *
-     *    http://www.FreeRTOS.org/support                                    *
-     *                                                                       *
-     *    Thank you!                                                         *
-     *                                                                       *
-    ***************************************************************************
+	http://www.FreeRTOS.org/support - In return for receiving this top quality
+	embedded software for free we request you assist our global community by
+	participating in the support forum.
 
-    http://www.FreeRTOS.org - Documentation, books, training, latest versions,
-    license and Real Time Engineers Ltd. contact details.
+	http://www.FreeRTOS.org/training - Investing in training allows your team to
+	be as productive as possible as early as possible.  Now you can receive
+	FreeRTOS training directly from Richard Barry, CEO of Real Time Engineers
+	Ltd, and the world's leading authority on the world's leading RTOS.
 
     http://www.FreeRTOS.org/plus - A selection of FreeRTOS ecosystem products,
     including FreeRTOS+Trace - an indispensable productivity tool, a DOS
@@ -82,7 +56,7 @@
     http://www.FreeRTOS.org/labs - Where new FreeRTOS products go to incubate.
     Come and try FreeRTOS+TCP, our new open source TCP/IP stack for FreeRTOS.
 
-    http://www.OpenRTOS.com - Real Time Engineers ltd license FreeRTOS to High
+    http://www.OpenRTOS.com - Real Time Engineers ltd. license FreeRTOS to High
     Integrity Systems ltd. to sell under the OpenRTOS brand.  Low cost OpenRTOS
     licenses offer ticketed support, indemnification and commercial middleware.
 
@@ -111,7 +85,7 @@ extern "C" {
  * MACROS AND DEFINITIONS
  *----------------------------------------------------------*/
 
-#define tskKERNEL_VERSION_NUMBER "V8.2.0rc1"
+#define tskKERNEL_VERSION_NUMBER "V8.2.0"
 #define tskKERNEL_VERSION_MAJOR 8
 #define tskKERNEL_VERSION_MINOR 2
 #define tskKERNEL_VERSION_BUILD 0
@@ -1183,6 +1157,18 @@ constant. */
 		TaskHookFunction_t xTaskGetApplicationTaskTag( TaskHandle_t xTask ) PRIVILEGED_FUNCTION;
 	#endif /* configUSE_APPLICATION_TASK_TAG ==1 */
 #endif /* ifdef configUSE_APPLICATION_TASK_TAG */
+
+#if( configNUM_THREAD_LOCAL_STORAGE_POINTERS > 0 )
+
+	/* Each task contains an array of pointers that is dimensioned by the
+	configNUM_THREAD_LOCAL_STORAGE_POINTERS setting in FreeRTOSConfig.h.  The
+	kernel does not use the pointers itself, so the application writer can use
+	the pointers for any purpose they wish.  The following two functions are
+	used to set and query a pointer respectively. */	
+	void vTaskSetThreadLocalStoragePointer( TaskHandle_t xTaskToSet, BaseType_t xIndex, void *pvValue );
+	void *pvTaskGetThreadLocalStoragePointer( TaskHandle_t xTaskToQuery, BaseType_t xIndex );
+
+#endif
 
 /**
  * task.h

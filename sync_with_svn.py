@@ -65,11 +65,14 @@ print f
 copy(f, dest_srcs)
 
 ######## lwIP #########
+print("Syncing with lwIP")
 srcs = path.join(source, r'FreeRTOS/Demo/Common/ethernet/lwip-1.4.0/')
 dest_srcs = path.join(dest, r'bsp/lwip140_v2_4/src/lwip-1.4.0/')
 # warning, delete tree before copy !
 if path.exists(dest_srcs):
     rmtree(dest_srcs)
+print "from " + srcs
+print "to " + dest_srcs
 copytree(srcs, dest_srcs, ignore=ignore_patterns('ports'))
 
 srcs = path.join(source, r'FreeRTOS/Demo/CORTEX_A9_Zynq_ZC702/RTOSDemo/src/lwIP_Demo/lwIP_port')
@@ -77,9 +80,12 @@ dest_srcs = path.join(dest, r'bsp/lwip140_v2_4/src/contrib/ports/xilinx')
 # warning, delete tree before copy !
 if path.exists(dest_srcs):
     rmtree(dest_srcs)
+print "from " + srcs
+print "to " + dest_srcs
 copytree(srcs, dest_srcs)
 
 ######## FreeRTOS_CLI ########
+print("Syncing with FreeRTOS CLI")
 dest_srcs = path.join(dest, 'bsp/freertos_cli_v1_04/src/Source')
 for f in glob.glob(path.join(source, "FreeRTOS-Plus/Source/FreeRTOS-Plus-CLI/*")):
     print f
