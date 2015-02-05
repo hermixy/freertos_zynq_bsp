@@ -194,7 +194,7 @@ a lot of data that needs to be copied, this should be set high. */
 #define TCP_MSS					1460
 
 /* TCP sender buffer space (bytes). */
-#define TCP_SND_BUF				8129
+#define TCP_SND_BUF				8192
 
 /* TCP sender buffer space (pbufs). This must be at least = 2 *
    TCP_SND_BUF/TCP_MSS for things to work. */

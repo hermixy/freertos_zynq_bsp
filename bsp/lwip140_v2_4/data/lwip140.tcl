@@ -654,7 +654,7 @@ proc generate_lwip_opts {libhandle} {
     puts $lwipopts_fd "\#define TCP_QUEUE_OOSEQ $tcp_queue_ooseq"
     puts $lwipopts_fd "\#define TCP_MSS $tcp_mss"
     puts $lwipopts_fd "\#define TCP_SND_BUF $tcp_snd_buf"
-    puts $lwipopts_fd "\#define TCP_SND_QUEUELEN (16 * TCP_SND_BUF/TCP_MSS)"
+    puts $lwipopts_fd "\#define TCP_SND_QUEUELEN (4 * TCP_SND_BUF/TCP_MSS)"
     puts $lwipopts_fd "\#define TCP_SNDLOWAT (TCP_SND_BUF / 2)"
     puts $lwipopts_fd "\#define TCP_WND $tcp_wnd"
     puts $lwipopts_fd "\#define TCP_MAXRTX $tcp_maxrtx"
