@@ -72,6 +72,7 @@ BEGIN LIBRARY lwip140
     PARAM name = tcp_wnd, desc = "TCP Window (bytes)", type = int, default = 2048;
     PARAM name = tcp_maxrtx, desc = "TCP Maximum retransmission value", type = int, default = 12;
     PARAM name = tcp_synmaxrtx, desc = "TCP Maximum SYN retransmission value", type = int, default = 4;
+    PARAM name = lwip_so_rcvtimeo, desc = "Enable Receive Timeout", type = bool, default = false;
   END CATEGORY
 
   BEGIN CATEGORY igmp_options

@@ -579,20 +579,20 @@ proc generate_lwip_opts {libhandle} {
     puts $lwipopts_fd ""
 
     # memory options
-    set mem_size        [get_property CONFIG.mem_size $libhandle]
-    set memp_n_pbuf     [get_property CONFIG.memp_n_pbuf $libhandle]
-    set lwip_raw        [get_property CONFIG.lwip_raw $libhandle]
-    set memp_n_raw_pcb  [get_property CONFIG.memp_n_raw_pcb $libhandle]
-    set memp_n_udp_pcb  [get_property CONFIG.memp_n_udp_pcb $libhandle]
-    set memp_n_tcp_pcb  [get_property CONFIG.memp_n_tcp_pcb $libhandle]
-    set memp_n_tcp_pcb_listen   [get_property CONFIG.memp_n_tcp_pcb_listen $libhandle]
-    set memp_n_tcp_seg          [get_property CONFIG.memp_n_tcp_seg $libhandle]
-    set memp_n_sys_timeout  [get_property CONFIG.memp_n_sys_timeout $libhandle]
-    set memp_num_netbuf     [get_property CONFIG.memp_num_netbuf $libhandle]
-    set memp_num_netconn    [get_property CONFIG.memp_num_netconn $libhandle]
-    set memp_num_tcpip_msg_api    [get_property CONFIG.memp_num_tcpip_msg_api $libhandle]
-    set memp_num_tcpip_msg_inpkt  [get_property CONFIG.memp_num_tcpip_msg_inpkt $libhandle]
-    set memp_num_arp_queue  [get_property CONFIG.memp_num_arp_queue $libhandle]
+    set mem_size                 [get_property CONFIG.mem_size $libhandle]
+    set memp_n_pbuf              [get_property CONFIG.memp_n_pbuf $libhandle]
+    set lwip_raw                 [get_property CONFIG.lwip_raw $libhandle]
+    set memp_n_raw_pcb           [get_property CONFIG.memp_n_raw_pcb $libhandle]
+    set memp_n_udp_pcb           [get_property CONFIG.memp_n_udp_pcb $libhandle]
+    set memp_n_tcp_pcb           [get_property CONFIG.memp_n_tcp_pcb $libhandle]
+    set memp_n_tcp_pcb_listen    [get_property CONFIG.memp_n_tcp_pcb_listen $libhandle]
+    set memp_n_tcp_seg           [get_property CONFIG.memp_n_tcp_seg $libhandle]
+    set memp_n_sys_timeout       [get_property CONFIG.memp_n_sys_timeout $libhandle]
+    set memp_num_netbuf          [get_property CONFIG.memp_num_netbuf $libhandle]
+    set memp_num_netconn         [get_property CONFIG.memp_num_netconn $libhandle]
+    set memp_num_tcpip_msg_api   [get_property CONFIG.memp_num_tcpip_msg_api $libhandle]
+    set memp_num_tcpip_msg_inpkt [get_property CONFIG.memp_num_tcpip_msg_inpkt $libhandle]
+    set memp_num_arp_queue       [get_property CONFIG.memp_num_arp_queue $libhandle]
     # hint:
     # MEM_ALIGNMENT: should be set to the alignment of the CPU for which
     # lwIP is compiled. 4 byte alignment -> define MEM_ALIGNMENT to 4, 2
@@ -634,14 +634,15 @@ proc generate_lwip_opts {libhandle} {
     puts $lwipopts_fd ""
 
     # TCP options
-    set lwip_tcp        [expr [get_property CONFIG.lwip_tcp $libhandle] == true]
-    set tcp_ttl         [get_property CONFIG.tcp_ttl $libhandle]
-    set tcp_queue_ooseq [get_property CONFIG.tcp_queue_ooseq $libhandle]
-    set tcp_mss         [get_property CONFIG.tcp_mss $libhandle]
-    set tcp_snd_buf     [get_property CONFIG.tcp_snd_buf $libhandle]
-    set tcp_wnd         [get_property CONFIG.tcp_wnd $libhandle]
-    set tcp_maxrtx      [get_property CONFIG.tcp_maxrtx $libhandle]
-    set tcp_synmaxrtx   [get_property CONFIG.tcp_synmaxrtx $libhandle]
+    set lwip_tcp           [expr [get_property CONFIG.lwip_tcp $libhandle] == true]
+    set lwip_so_rcvtimeo   [expr [get_property CONFIG.lwip_so_recvtimeo $libhandle] == true]
+    set tcp_ttl            [get_property CONFIG.tcp_ttl $libhandle]
+    set tcp_queue_ooseq    [get_property CONFIG.tcp_queue_ooseq $libhandle]
+    set tcp_mss            [get_property CONFIG.tcp_mss $libhandle]
+    set tcp_snd_buf        [get_property CONFIG.tcp_snd_buf $libhandle]
+    set tcp_wnd            [get_property CONFIG.tcp_wnd $libhandle]
+    set tcp_maxrtx         [get_property CONFIG.tcp_maxrtx $libhandle]
+    set tcp_synmaxrtx      [get_property CONFIG.tcp_synmaxrtx $libhandle]
     # hint:
     # TCP sender buffer space (pbufs). This must be at least = 2 * TCP_SND_BUF/TCP_MSS
     # for things to work. (TCP_SND_QUEUELEN)
@@ -650,6 +651,7 @@ proc generate_lwip_opts {libhandle} {
     # available in the tcp snd_buf for select to return writable (TCP_SNDLOWAT)
     #
     puts $lwipopts_fd "\#define LWIP_TCP $lwip_tcp"
+    puts $lwipopts_fd "\#define LWIP_SO_RCVTIMEO $lwip_so_rcvtimeo"
     puts $lwipopts_fd "\#define TCP_TTL $tcp_ttl"
     puts $lwipopts_fd "\#define TCP_QUEUE_OOSEQ $tcp_queue_ooseq"
     puts $lwipopts_fd "\#define TCP_MSS $tcp_mss"
