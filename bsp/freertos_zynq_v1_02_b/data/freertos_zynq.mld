@@ -150,10 +150,10 @@ BEGIN OS freertos_zynq
     PARAM name = mac_addr3, type = string, default = "0x15", desc "MAC";
     PARAM name = mac_addr4, type = string, default = "0x15", desc "MAC";
     PARAM name = mac_addr5, type = string, default = "0x16", desc "MAC";
-    PARAM name = ip_addr0, type = int, default = 172, desc = "IP";
-    PARAM name = ip_addr1, type = int, default = 25, desc = "IP";
-    PARAM name = ip_addr2, type = int, default = 218, desc = "IP";
-    PARAM name = ip_addr3, type = int, default = 200, desc = "IP";
+    PARAM name = ip_addr0, type = int, default = 219, desc = "IP";
+    PARAM name = ip_addr1, type = int, default = 244, desc = "IP";
+    PARAM name = ip_addr2, type = int, default = 216, desc = "IP";
+    PARAM name = ip_addr3, type = int, default = 14, desc = "IP";
     PARAM name = net_mask0, type = int, default = 255, desc = "MASK";
     PARAM name = net_mask1, type = int, default = 255, desc = "MASK";
     PARAM name = net_mask2, type = int, default = 255, desc = "MASK";
