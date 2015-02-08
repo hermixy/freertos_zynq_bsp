@@ -68,8 +68,8 @@ BEGIN LIBRARY lwip140
     PARAM name = tcp_ttl, desc = "TCP TTL value", type = int, default = 255;
     PARAM name = tcp_queue_ooseq, desc = "Should TCP queue segments arriving out of order. Set to 0 if your device is low on memory", type = bool, default = true;
     PARAM name = tcp_mss, desc = "TCP Maximum segment size (bytes), standard = 1460", type = int, default = 1024;
-    PARAM name = tcp_snd_buf, desc = "TCP sender buffer space (bytes), set as large as possible, suggest be a multiple of TCP_MSS and can be devided by 2", type = int, default = 16384;
-    PARAM name = tcp_wnd, desc = "TCP Window (bytes), at least 2x tcp_mss, set it equal to tcn_snd_buf for maximum performance", type = int, default = 2048;
+    PARAM name = tcp_snd_buf, desc = "TCP sender buffer space (bytes), suggest be a multiple of TCP_MSS.", type = string, default = (16*TCP_MSS);
+    PARAM name = tcp_wnd, desc = "TCP Window (bytes), at least 2x tcp_mss.", type = string, default = (4*TCP_MSS);
     PARAM name = tcp_maxrtx, desc = "TCP Maximum retransmission value", type = int, default = 12;
     PARAM name = tcp_synmaxrtx, desc = "TCP Maximum SYN retransmission value", type = int, default = 4;
     PARAM name = lwip_tcp_keepalive, desc = "Enable Keepalive options processing", type = bool, default = false;

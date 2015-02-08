@@ -446,11 +446,6 @@ proc generate_lwip_opts {libhandle} {
     puts $lwipopts_fd "\#define MEMP_NUM_FRAG_PBUF 256"
     puts $lwipopts_fd "\#define IP_OPTIONS_ALLOWED 0"
     if {$proctype != "ps7_cortexa9"} {
-        puts $lwipopts_fd "\#define TCP_OVERSIZE 0"
-    } else {
-        puts $lwipopts_fd "\#define TCP_OVERSIZE TCP_MSS"
-    }
-    if {$proctype != "ps7_cortexa9"} {
         puts $lwipopts_fd "\#define LWIP_COMPAT_MUTEX 1"
         puts $lwipopts_fd "\#define LWIP_ALLOW_MEM_FREE_FROM_OTHER_CONTEXT 0"
     } else {
@@ -661,12 +656,17 @@ proc generate_lwip_opts {libhandle} {
     puts $lwipopts_fd "\#define TCP_TTL $tcp_ttl"
     puts $lwipopts_fd "\#define TCP_QUEUE_OOSEQ $tcp_queue_ooseq"
     puts $lwipopts_fd "\#define TCP_MSS $tcp_mss"
-    puts $lwipopts_fd "\#define TCP_SND_BUF $tcp_snd_buf"
-    puts $lwipopts_fd "\#define TCP_SND_QUEUELEN (4 * TCP_SND_BUF/TCP_MSS)"
-    puts $lwipopts_fd "\#define TCP_SNDLOWAT (TCP_SND_BUF / 2)"
     puts $lwipopts_fd "\#define TCP_WND $tcp_wnd"
+    puts $lwipopts_fd "\#define TCP_SND_BUF $tcp_snd_buf"
+    puts $lwipopts_fd "\#define TCP_SND_QUEUELEN (8 * TCP_SND_BUF/TCP_MSS)"
+    puts $lwipopts_fd "\#define TCP_SNDLOWAT (TCP_SND_BUF / 2)"
     puts $lwipopts_fd "\#define TCP_MAXRTX $tcp_maxrtx"
     puts $lwipopts_fd "\#define TCP_SYNMAXRTX $tcp_synmaxrtx"
+    if {$proctype != "ps7_cortexa9"} {
+        puts $lwipopts_fd "\#define TCP_OVERSIZE 0"
+    } else {
+        puts $lwipopts_fd "\#define TCP_OVERSIZE TCP_MSS"
+    }
 
     # ARP options
     set lwip_arp        [expr [get_property CONFIG.lwip_arp $libhandle] == true]
