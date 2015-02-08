@@ -636,6 +636,7 @@ proc generate_lwip_opts {libhandle} {
     # TCP options
     set lwip_tcp           [expr [get_property CONFIG.lwip_tcp $libhandle] == true]
     set lwip_so_rcvtimeo   [get_property CONFIG.lwip_so_rcvtimeo $libhandle]
+    set lwip_tcp_keepalive [get_property CONFIG.lwip_tcp_keepalive $libhandle]
     set tcp_ttl            [get_property CONFIG.tcp_ttl $libhandle]
     set tcp_queue_ooseq    [get_property CONFIG.tcp_queue_ooseq $libhandle]
     set tcp_mss            [get_property CONFIG.tcp_mss $libhandle]
@@ -653,6 +654,9 @@ proc generate_lwip_opts {libhandle} {
     puts $lwipopts_fd "\#define LWIP_TCP $lwip_tcp"
     if {$lwip_so_rcvtimeo} {
         puts $lwipopts_fd "\#define LWIP_SO_RCVTIMEO $lwip_so_rcvtimeo"
+    }
+    if {$lwip_tcp_keepalive} {
+        puts $lwipopts_fd "\#define LWIP_TCP_KEEPALIVE 1"
     }
     puts $lwipopts_fd "\#define TCP_TTL $tcp_ttl"
     puts $lwipopts_fd "\#define TCP_QUEUE_OOSEQ $tcp_queue_ooseq"
