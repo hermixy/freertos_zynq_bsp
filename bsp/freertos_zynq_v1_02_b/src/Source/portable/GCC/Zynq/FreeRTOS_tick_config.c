@@ -77,6 +77,7 @@
 
 #define XSCUTIMER_CLOCK_HZ ( XPAR_CPU_CORTEXA9_0_CPU_CLK_FREQ_HZ / 2UL )
 
+extern XScuGic xInterruptController; 	/* Interrupt controller instance */
 static XScuTimer xTimer;
 
 /*
@@ -87,7 +88,6 @@ static XScuTimer xTimer;
  */
 void vConfigureTickInterrupt( void )
 {
-static XScuGic xInterruptController; 	/* Interrupt controller instance */
 BaseType_t xStatus;
 extern void FreeRTOS_Tick_Handler( void );
 XScuTimer_Config *pxTimerConfig;
