@@ -7,7 +7,7 @@ BEGIN LIBRARY freertos_cli
   OPTION copyfiles = all;
   OPTION app_linker_flags = "-Wl,--start-group,-lxil,-lfreertos_cli,-lgcc,-lc,--end-group";
   OPTION requires_os = (standalone xilkernel freertos_zynq);
-  OPTION VERSION = 1.04;
+  OPTION VERSION = 1.04.a;
   OPTION NAME = freertos_cli;
 
   PARAM name = stdin, type = peripheral_instance, requires_interface = stdin, default=none, desc = "(unused) Specify the instance name of the standard input peripheral";
