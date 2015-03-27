@@ -651,14 +651,14 @@ proc generate_lwip_opts {libhandle} {
         puts $lwipopts_fd "\#define LWIP_SO_RCVTIMEO $lwip_so_rcvtimeo"
     }
     if {$lwip_tcp_keepalive} {
-        puts $lwipopts_fd "\#define LWIP_TCP_KEEPALIVE 1"
+        puts $lwipopts_fd "\#define LWIP_TCP_KEEPALIVE $lwip_tcp_keepalive"
     }
     puts $lwipopts_fd "\#define TCP_TTL $tcp_ttl"
     puts $lwipopts_fd "\#define TCP_QUEUE_OOSEQ $tcp_queue_ooseq"
     puts $lwipopts_fd "\#define TCP_MSS $tcp_mss"
     puts $lwipopts_fd "\#define TCP_WND $tcp_wnd"
     puts $lwipopts_fd "\#define TCP_SND_BUF $tcp_snd_buf"
-    puts $lwipopts_fd "\#define TCP_SND_QUEUELEN (8 * TCP_SND_BUF/TCP_MSS)"
+    puts $lwipopts_fd "\#define TCP_SND_QUEUELEN (16 * TCP_SND_BUF/TCP_MSS)"
     puts $lwipopts_fd "\#define TCP_SNDLOWAT (TCP_SND_BUF / 2)"
     puts $lwipopts_fd "\#define TCP_MAXRTX $tcp_maxrtx"
     puts $lwipopts_fd "\#define TCP_SYNMAXRTX $tcp_synmaxrtx"
@@ -818,7 +818,7 @@ proc update_temac_topology {emac processor topologyvar} {
     if { [lsearch -exact $proc_connected_periphs $intc_handle] == -1 } {
         set intc_name [get_property NAME $intc_handle]
         set proc_name [get_property NAME $processor]	
-        error "ERROR: $intc_name to which xps_ll_temac interrupt is connected is not addressable \
+        error "ERROR: $intc_name to which xps_ll_temac interrupt connected is not addressable \
         from processor $proc_name" "" "mdt_error"
     }
 
