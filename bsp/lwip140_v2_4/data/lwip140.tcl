@@ -486,6 +486,7 @@ proc generate_lwip_opts {libhandle} {
             puts $lwipopts_fd "\#define TCPIP_THREAD_NAME \"tcpip\""
             puts $lwipopts_fd "\#define LWIP_HTTPD_MAX_TAG_NAME_LEN 20"
             puts $lwipopts_fd "\#define LWIP_HTTPD_MAX_TAG_INSERT_LEN 2014"
+            puts $lwipopts_fd "\#define configLWIP_TASK_PRIORITY (configMAX_PRIORITIES - 2)"
             puts $lwipopts_fd "\#define TCPIP_THREAD_PRIO configLWIP_TASK_PRIORITY"
             puts $lwipopts_fd "\#define TCPIP_THREAD_STACKSIZE (configMINIMAL_STACK_SIZE * 3)"
             puts $lwipopts_fd "\#define DEFAULT_TCP_RECVMBOX_SIZE 5"

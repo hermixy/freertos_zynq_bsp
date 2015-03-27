@@ -370,17 +370,6 @@ proc generate {os_handle} {
     puts $config_file "\#define configUNIQUE_INTERRUPT_PRIORITIES $unique_interrupt_priorities"
     puts $config_file ""
 
-    # network options
-    puts $config_file "/* Network configuration settings - only used when the lwIP example is built. */"
-
-    set mac_input_task_priority [get_property CONFIG.mac_input_task_priority $os_handle]
-    set lwip_task_priority [get_property CONFIG.lwip_task_priority $os_handle]
-    set cli_task_priority [get_property CONFIG.cli_task_priority $os_handle]
-    puts $config_file "\#define configMAC_INPUT_TASK_PRIORITY $mac_input_task_priority"
-    puts $config_file "\#define configLWIP_TASK_PRIORITY $lwip_task_priority"
-    puts $config_file "\#define configCLI_TASK_PRIORITY $cli_task_priority"
-    puts $config_file ""
-
     # implement a typical 7-level priority system
     puts $config_file "/* Implement a typical 7-level priority systems */"
     puts $config_file "\#define REALTIME_PRIORITY (6)"
@@ -390,6 +379,9 @@ proc generate {os_handle} {
     puts $config_file "\#define LOW_PRIORITY      (2)"
     puts $config_file "\#define LOWEST_PRIORITY   (1)"
     puts $config_file "\#define IDLE_PRIORITY     (0)"
+    puts $config_file ""
+
+    # network options
     puts $config_file ""
 
     set mac_addr0 [get_property CONFIG.mac_addr0 $os_handle]

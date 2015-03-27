@@ -83,7 +83,7 @@ BEGIN OS freertos_zynq
     PARAM name = peripheral_clock_hz, type = int, default = 33333000, desc = "Peripheral Module Clock (deprecated)";
     PARAM name = tick_rate_hz, type = int, default = 1000, desc = "The frequency of the RTOS tick interrupt. The tick interrupt is used to measure time. Therefore a higher tick frequency means time can be measured to a higher resolution. (typical 1000 = 1ms)";
     PARAM name = max_api_call_interrupt_priority, type = int, default = 18, desc = "Interrupts that are assigned a priority at or below configMAX_API_CALL_INTERRUPT_PRIORITY can call FreeRTOS safe API functions and will nest (which counter-intuitively in the ARM generic interrupt controller [GIC] means a priority that has a numerical value above configMAX_API_CALL_INTERRUPT_PRIORITY).";
-    PARAM name = max_priorities, type = int, default = 7, desc = "The number of task priorities that will be available.  Priorities can be assigned from zero to (max_priorities - 1)";
+    PARAM name = max_priorities, type = int, default = 7, desc = "The number of task priorities that will be available.  Priorities can be assigned from zero to (max_priorities - 1). You should set it to 7 to use the typical priority levels";
     PARAM name = max_co_routine_priorities, type = int, default = 2, desc = "The number of priorities available to the application co-routines. Any number of co-routines can share the same priority. Co-routines are prioritised separately.";
     PARAM name = minimal_stack_size, type = int, default = 200, desc = "The size of the stack allocated to the Idle task. Also used by standard demo and test tasks found in the main FreeRTOS download.";
     PARAM name = total_heap_size, type = int, default = 80, desc = "(Kb) n*1024. This value will only be used if your application makes use of one of the sample memory allocation schemes provided in the FreeRTOS source code download. Sets the amount of RAM reserved for use by the kernel - used when tasks, queues and semaphores are created.";
@@ -141,9 +141,6 @@ BEGIN OS freertos_zynq
   # interface with lwip [tested]
   BEGIN CATEGORY network_options
     PARAM name = network_options, type = bool, default = true, desc = "Network configuration settings - only used when the lwIP example is built.", permit = user;
-    PARAM name = mac_input_task_priority, type = string, default = "( configMAX_PRIORITIES - 1 )", desc = "The priority for the task that unblocked by the MAC interrupt to process received packets";
-    PARAM name = lwip_task_priority, type = string, default = "( configMAX_PRIORITIES - 2 )", desc = " The priority of the task that runs the lwIP stack.";
-    PARAM name = cli_task_priority, type = string, default = "( tskIDLE_PRIORITY )", desc = "The priority of the task that uses lwIP sockets to provide a simple command line interface";
     PARAM name = mac_addr0, type = string, default = "0x00", desc "MAC";
     PARAM name = mac_addr1, type = string, default = "0x13", desc "MAC";
     PARAM name = mac_addr2, type = string, default = "0x14", desc "MAC";
