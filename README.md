@@ -1,21 +1,26 @@
-freertos_zynq_bsp
-=================
+freertos bsp for Zynq (Microzed, Zedboard, etc.)
+================================================
+
+## features
 
 The zynq bsp for freeRTOS, using the cutting-edge version of freeRTOS (currently v8.2.0rc1) and the demos in `CORTEX_A9_Zynq_ZC702` of the official freeRTOS repository.
 
-`freertos_zynq.mld` and `freertos_zynq.tcl` are migrating from Xilinx community ports, the latest version is available via [interactive freertos 2014.2](http://interactive.freertos.org/entries/31659559-Xilinx-Zynq-FreeRTOS-and-lwIP-demo-XAPP1026-Vivado-2014-2) or the official xapp1026 [xapp1026 App note](http://www.xilinx.com/support/documentation/application_notes/xapp1026.pdf), which shipping a vfreeRTOS of version v7.0.2.
+`freertos_zynq.mld` and `freertos_zynq.tcl` are migrating from Xilinx community ports, the latest version is available via [interactive freertos 2014.2](http://interactive.freertos.org/entries/31659559-Xilinx-Zynq-FreeRTOS-and-lwIP-demo-XAPP1026-Vivado-2014-2) or the official xapp1026 [xapp1026 App note](http://www.xilinx.com/support/documentation/application_notes/xapp1026.pdf), which shipping a BSP of FreeRTOS version v7.0.2.
+
+This bsp aims to illustrate the basis of freertos by porting all demos in official FreeRTOS repository while also includes lwip capabilities.
 
 The demo files of `CORTEX_A9_Zynq_ZC702` are available from official svn or via [freertos sync at github](https://github.com/cjlano/freertos). The building instructions on ZC702 can be found at the official freeRTOS website [RTOS-Xilinx-Zynq](http://www.freertos.org/RTOS-Xilinx-Zynq.html).
 
-This bsp aims to illustrate the basis of freertos by porting all the common demos, and also support microzed hardware (zynq-based) and lwip capabilities.
-
 ## supported drivers
 
-currently we aiming at `freertos` and `lwip` only. TODO list,
-- **add** FreeRTOS CLI package
-- **add** other demos and sw apps in the `Demo/common` folder
-- **add** board-aware (like LED toggling, buttons etc.,) to the package
-- **add** matrix algebra package
+Currently, the support drivers are :
+- **DONE** FreeRTOS CLI package,
+- **DONE** lwIP package,
+
+TODO list :
+- **add** other demos and sw apps in the `Demo/common` folder,
+- **add** board-aware (like LED toggling, buttons etc.,) demos to the package,
+- **add** matrix algebra package.
 
 ## Instructions
 
