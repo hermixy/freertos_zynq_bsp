@@ -59,11 +59,11 @@
 #
 
 proc swapp_get_name {} {
-    return "FreeRTOS BSP (1) Hello,world !";
+    return "FreeRTOS BSP (1) Hello, world !";
 }
 
 proc swapp_get_description {} {
-    return "A basic FreeRTOS demo, a starter program for any one who learns to program. This demo uses a software timer to print 'hello, world !' every 500ms. It does not use any task things in FreeRTOS, but anyway, it can run without any external hardware, only your Microzed or Zedboard would do.";
+    return "A basic FreeRTOS demo, a starter program for any one who learns to program. This demo uses a software timer to print 'hello, world' every 500ms. It can run without any external hardware, only your Microzed or Zedboard would do. You need to create a basic block diagram or use the provided 'zynq_basic.tcl' to generate one.";
 }
 
 proc check_os {} {
