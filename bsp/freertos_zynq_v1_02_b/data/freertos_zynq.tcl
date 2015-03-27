@@ -311,9 +311,12 @@ proc generate {os_handle} {
     set generate_run_time_stats [expr [get_property CONFIG.generate_run_time_stats $os_handle] == true]
     if {$generate_run_time_stats == 1} {
         puts $config_file "\#define configGENERATE_RUN_TIME_STATS $generate_run_time_stats"
+        puts $config_file ""
+        puts $config_file "/* use watchdog in timer mode */"
         puts $config_file "\#include \"xscuwdt.h\""
         puts $config_file "extern XScuWdt xWatchDogInstance;"
         puts $config_file "extern void vInitialiseTimerForRunTimeStats( void );"
+        puts $config_file ""
         puts $config_file "\#define portCONFIGURE_TIMER_FOR_RUN_TIME_STATS() vInitialiseTimerForRunTimeStats()"
         puts $config_file "\#define portGET_RUN_TIME_COUNTER_VALUE() ( ( 0xffffffffUL - XScuWdt_ReadReg( xWatchDogInstance.Config.BaseAddr, XSCUWDT_COUNTER_OFFSET ) ) >> 1 )"
         puts $config_file ""
@@ -376,6 +379,17 @@ proc generate {os_handle} {
     puts $config_file "\#define configMAC_INPUT_TASK_PRIORITY $mac_input_task_priority"
     puts $config_file "\#define configLWIP_TASK_PRIORITY $lwip_task_priority"
     puts $config_file "\#define configCLI_TASK_PRIORITY $cli_task_priority"
+    puts $config_file ""
+
+    # implement a typical 7-level priority system
+    puts $config_file "/* Implement a typical 7-level priority systems */"
+    puts $config_file "\#define REALTIME_PRIORITY (6)"
+    puts $config_file "\#define HIGHEST_PRIORITY  (5)"
+    puts $config_file "\#define HIGH_PRIORITY     (4)"
+    puts $config_file "\#define NORMAL_PRIORITY   (3)"
+    puts $config_file "\#define LOW_PRIORITY      (2)"
+    puts $config_file "\#define LOWEST_PRIORITY   (1)"
+    puts $config_file "\#define IDLE_PRIORITY     (0)"
     puts $config_file ""
 
     set mac_addr0 [get_property CONFIG.mac_addr0 $os_handle]
