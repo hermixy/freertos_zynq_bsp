@@ -68,9 +68,7 @@
 .arm
 
 .global _boot
-.global _freertos_vector_table
 .global _vector_table
-.set _vector_table, _freertos_vector_table
 
 .global FIQInterrupt
 .global DataAbortInterrupt
@@ -80,8 +78,8 @@
 .extern FreeRTOS_IRQ_Handler
 .extern FreeRTOS_SWI_Handler
 
-.section .freertos_vectors
-_freertos_vector_table:
+.section .vectors
+_vector_table:
 	B	  _boot
 	B	  FreeRTOS_Undefined
 	ldr   pc, _swi
@@ -132,7 +130,7 @@ FreeRTOS_PrefetchAbortHandler:	/* Prefetch Abort handler */
 vPortInstallFreeRTOSVectorTable:
 
 	/* Set VBAR to the vector table that contains the FreeRTOS handlers. */
-	ldr	r0, =_freertos_vector_table
+	ldr	r0, =_vector_table
 	mcr	p15, 0, r0, c12, c0, 0
 	dsb
 	isb

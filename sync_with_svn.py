@@ -58,6 +58,16 @@ with open(fp, "wb") as fid:
 f = path.join(source,"FreeRTOS/Demo/CORTEX_A9_Zynq_ZC702/RTOSDemo/src/FreeRTOS_tick_config.c")
 print f
 copy(f, dest_srcs)
+# patch 'extern XScuGic' point
+fp = path.join(dest,r"bsp/freertos_zynq_v8/src/Source/portable/GCC/Zynq/FreeRTOS_tick_config.c")
+with open(fp, "rU") as fid:
+    lines = fid.readlines()
+# open using "wb" to exclude WINDOWS \r\n endings
+with open(fp, "wb") as fid:
+    for line in lines:
+        line = re.sub("static XScuGic", "extern XScuGic", line);
+        fid.write(line)
+
 f = path.join(source,"FreeRTOS/Demo/CORTEX_A9_Zynq_ZC702/RTOSDemo/src/FreeRTOSConfig.h")
 print f
 copy(f, dest_srcs)
