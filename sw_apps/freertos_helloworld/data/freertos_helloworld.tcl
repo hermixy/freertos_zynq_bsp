@@ -63,7 +63,7 @@ proc swapp_get_name {} {
 }
 
 proc swapp_get_description {} {
-    return "A basic FreeRTOS demo, use a software timer to print hello, world ! every 500ms";
+    return "A basic FreeRTOS demo, a starter program for any one who learns to program. This demo uses a software timer to print 'hello, world !' every 500ms. It does not use any task things in FreeRTOS, but anyway, it can run without any external hardware, only your Microzed or Zedboard would do.";
 }
 
 proc check_os {} {
