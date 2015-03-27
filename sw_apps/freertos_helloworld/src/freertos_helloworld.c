@@ -5,8 +5,6 @@
  * A software timer is used to print the message "hello, world"
  * every 500ms.
  *
- * And strange, FreeRTOS must have the top file named "main.c"
- *
  * liu_benyuan <liubenyuan@gmail.com>
  */
 

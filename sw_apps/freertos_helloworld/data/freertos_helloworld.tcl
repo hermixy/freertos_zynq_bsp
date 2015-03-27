@@ -59,7 +59,7 @@
 #
 
 proc swapp_get_name {} {
-    return "FreeRTOS hello,world !";
+    return "FreeRTOS Hello,world !";
 }
 
 proc swapp_get_description {} {

@@ -2,23 +2,17 @@
  * main() do some house keeping job to make the whole program run.
  * It initialises two global control : GIC and WDT, for other program.
  *
- * A software timer is used to toggle the LED on Microzed board and 
- * polling the status of button every 500ms (soft timer).
+ * A AXI timer is used to print the message "hello, world"
+ * every 500ms.
  *
  * liu_benyuan <liubenyuan@gmail.com>
  */
 
-/* Scheduler include files. */
+/* Kernel includes. */
 #include "FreeRTOS.h"
 #include "task.h"
-#include "timers.h"
-
-/* XILINX includes. */
-#include "xparameters.h"
-#include "xscutimer.h"
-#include "xscugic.h"
-
-/* GPIO */
+#include "semphr.h"
+#include "freertos_axitimer.h"
 #include "freertos_gpio.h"
 
 /*
@@ -50,25 +44,21 @@ XScuGic xInterruptController;
 
 /*-----------------------------------------------------------*/
 
-/*
- * The rate at which data is sent to the queue. (software timer)
- * The 500ms value is converted to ticks using the
- * portTICK_PERIOD_MS constant.
- */
-#define mainTIMER_PERIOD_MS         ( 500 / portTICK_PERIOD_MS )
+/* Handles of the test tasks that must be accessed from other test tasks. */
+static TaskHandle_t xSlaveHandle;
 
-/* The LED toggled by the RX task. */
-#define mainTIMER_LED               ( 0 )
+/* TIMER 1 */
+XTmrCtr xTimer;
+static SemaphoreHandle_t xTimerSemaphore = NULL;
+void TimerISR(void *CallBackRef, u8 TmrCtrNumber);
+static void TimerTask(void *pvTask);
 
-/* A block time of zero just means "don't block". */
-#define mainDONT_BLOCK              ( 0 )
-/*-----------------------------------------------------------*/
+const u16 TimerID = XPAR_AXI_TIMER_0_DEVICE_ID;
+const u16 TimerINTR = XPAR_FABRIC_AXI_TIMER_0_INTERRUPT_INTR;
+const BaseType_t TimerPRIORITY = ( configMAX_API_CALL_INTERRUPT_PRIORITY + 1 );
+const BaseType_t intsemTIMER_PRIORITY = ( tskIDLE_PRIORITY + 1 );
+const u32 TimerCnt = 50000000UL;
 
-/*
- * The callback for the timer that just toggles an LED to show the system is
- * running.
- */
-static void prvLEDToggleTimer( TimerHandle_t pxTimer );
 /*-----------------------------------------------------------*/
 
 int main( void )
@@ -76,20 +66,26 @@ int main( void )
     /* Configure the hardware ready to run the demo. */
     prvSetupHardware();
 
-    /* A timer is used to toggle an LED just to show the application is
-    executing. */
-    TimerHandle_t xTimer;
-    xTimer = xTimerCreate( "LED",                     /* Text name to make debugging easier. */
-                           mainTIMER_PERIOD_MS,       /* The timer's period. */
-                           pdTRUE,                    /* This is an auto reload timer. */
-                           NULL,                      /* ID is not used. */
-                           prvLEDToggleTimer );       /* The callback function. */
+    /* Create the semaphores that are given from an interrupt. */
+    xTimerSemaphore = xSemaphoreCreateBinary();
+    configASSERT( xTimerSemaphore );
 
-    /*
-     * Start the timer. (NOTE : this timer is a software timer)
-     */
-    configASSERT( xTimer );
-    xTimerStart( xTimer, mainDONT_BLOCK );
+    /* create the task */
+    xTaskCreate(TimerTask,
+                "A-Timer",
+                configMINIMAL_STACK_SIZE,
+                NULL,
+                intsemTIMER_PRIORITY,
+                &xSlaveHandle );
+
+    /* RTOS way */
+    AXITimer_Init(&xTimer, TimerID);
+    AXITimer_OptSet(&xTimer, 0, XTC_DOWN_COUNT_OPTION  |
+                                XTC_AUTO_RELOAD_OPTION |
+                                XTC_INT_MODE_OPTION);
+    AXITimer_LoadSet(&xTimer, 0, TimerCnt);
+    AXITimer_CallbackSet(&xTimer, 0, TimerINTR, TimerISR);
+    AXITimer_Start(&xTimer, 0);
 
     /* initialise GPIO */
     GPIO_Init();
@@ -111,20 +107,44 @@ int main( void )
 }
 /*-----------------------------------------------------------*/
 
-static void prvLEDToggleTimer( TimerHandle_t pxTimer )
+/* pending for Timer0 semaphore */
+static void TimerTask(void *pvTask)
 {
-    /* Prevent compiler warnings. */
-    ( void ) pxTimer;
+const TickType_t TimerBlock = 200 * portTICK_PERIOD_MS;
 
-    /*
-     * Just do something (i.e., toggle an LED)
-     * to show the application is running.
-     */
-    GPIO_Toggle( partstLED_OUTPUT );
+    while(1) {
+        if( xSemaphoreTake( xTimerSemaphore, ( TickType_t ) TimerBlock ) == pdPASS ) {
+            GPIO_Toggle( partstLED_OUTPUT );
+        }
+    }
 
-    /* read from button, you may press or not the button */
-    unsigned int val = GPIO_Read( partstBTN_INPUT );
-    xil_printf("button status = %d\n", val);
+}
+/*-----------------------------------------------------------*/
+
+/* post semaphore when INIT */
+void TimerISR(void *CallBackRef, u8 TmrCtrNumber)
+{
+u32 ControlStatusReg;
+BaseType_t xHigherPriorityTaskWoken = pdFALSE;
+
+    /* mask interrupt */
+    ControlStatusReg = XTmrCtr_ReadReg(xTimer.BaseAddress,
+                                       0,
+                                       XTC_TCSR_OFFSET);
+
+    XTmrCtr_WriteReg( xTimer.BaseAddress,
+                      0,
+                      XTC_TCSR_OFFSET,
+                      ControlStatusReg | XTC_CSR_INT_OCCURED_MASK);
+
+    /* post semaphore */
+    xSemaphoreGiveFromISR( xTimerSemaphore, &xHigherPriorityTaskWoken );
+
+    /* reset timer */
+    XTmrCtr_Reset(CallBackRef,TmrCtrNumber);
+
+    /* we yield to previous tasks */
+    portYIELD_FROM_ISR( xHigherPriorityTaskWoken );
 
 }
 /*-----------------------------------------------------------*/

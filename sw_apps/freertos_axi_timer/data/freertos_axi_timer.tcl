@@ -1,11 +1,11 @@
 #
 
 proc swapp_get_name {} {
-    return "FreeRTOS GPIO !";
+    return "FreeRTOS AXI Timer !";
 }
 
 proc swapp_get_description {} {
-    return "This demo can use both AXI GPIO or PS GPIO to control LED (output) or Buttons (input) ! It is based on the 'hello, world !' demo we had create before and also uses a software timer. The driver are in the 'freertos_gpio.c' and it has support on both AXI- or PS- GPIO, but if you want to use AXI GPIO, you should re-create the block design. PS GPIO is the default, LED is at pin (47) while button is at pin (51), modify the settings the way you like.";
+    return "This demo is based on previous demos (PS GPIO and Hello), while instead of the soft timers in 'hello, world !', it uses an AXI timer to generate an interrupt, then acknowledge this interrupt to toggle a LED indicator. So, from this demo, you may learn howto use AXI Timer, handle interrupt, and write the PS GPIO."
 }
 
 proc check_os {} {
