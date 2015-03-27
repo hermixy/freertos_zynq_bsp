@@ -1,7 +1,7 @@
 #
 
 proc swapp_get_name {} {
-    return "FreeRTOS AXI Timer !";
+    return "FreeRTOS BSP (3) AXI Timer !";
 }
 
 proc swapp_get_description {} {

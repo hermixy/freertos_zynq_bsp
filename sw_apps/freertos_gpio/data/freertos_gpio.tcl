@@ -1,7 +1,7 @@
 #
 
 proc swapp_get_name {} {
-    return "FreeRTOS GPIO !";
+    return "FreeRTOS BSP (2) GPIO !";
 }
 
 proc swapp_get_description {} {
