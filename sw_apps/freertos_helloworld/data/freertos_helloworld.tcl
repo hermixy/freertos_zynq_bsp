@@ -59,11 +59,11 @@
 #
 
 proc swapp_get_name {} {
-    return "FreeRTOS Hello World.";
+    return "FreeRTOS hello,world !";
 }
 
 proc swapp_get_description {} {
-    return "Use software timer to print hello,world every 500ms";
+    return "A basic FreeRTOS demo, use a software timer to print hello, world ! every 500ms";
 }
 
 proc check_os {} {
