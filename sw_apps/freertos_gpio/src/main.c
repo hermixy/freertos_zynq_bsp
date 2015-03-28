@@ -2,7 +2,7 @@
  * main() do some house keeping job to make the whole program run.
  * It initialises two global control : GIC and WDT, for other program.
  *
- * A software timer is used to toggle the LED on Microzed board and 
+ * A software timer is used to toggle the LED on Microzed board and
  * polling the status of button every 500ms (soft timer).
  *
  * liu_benyuan <liubenyuan@gmail.com>
@@ -17,9 +17,6 @@
 #include "xparameters.h"
 #include "xscutimer.h"
 #include "xscugic.h"
-
-/* GPIO */
-#include "freertos_gpio.h"
 
 /*
  * Configure the hardware as necessary to run this demo.
@@ -49,50 +46,15 @@ XScuWdt xWatchDogInstance;
 XScuGic xInterruptController;
 
 /*-----------------------------------------------------------*/
-
-/*
- * The rate at which data is sent to the queue. (software timer)
- * The 500ms value is converted to ticks using the
- * portTICK_PERIOD_MS constant.
- */
-#define mainTIMER_PERIOD_MS         ( 500 / portTICK_PERIOD_MS )
-
-/* The LED toggled by the RX task. */
-#define mainTIMER_LED               ( 0 )
-
-/* A block time of zero just means "don't block". */
-#define mainDONT_BLOCK              ( 0 )
-/*-----------------------------------------------------------*/
-
-/*
- * The callback for the timer that just toggles an LED to show the system is
- * running.
- */
-static void prvLEDToggleTimer( TimerHandle_t pxTimer );
-/*-----------------------------------------------------------*/
+extern void app_gpio( void );
 
 int main( void )
 {
     /* Configure the hardware ready to run the demo. */
     prvSetupHardware();
 
-    /* A timer is used to toggle an LED just to show the application is
-    executing. */
-    TimerHandle_t xTimer;
-    xTimer = xTimerCreate( "LED",                     /* Text name to make debugging easier. */
-                           mainTIMER_PERIOD_MS,       /* The timer's period. */
-                           pdTRUE,                    /* This is an auto reload timer. */
-                           NULL,                      /* ID is not used. */
-                           prvLEDToggleTimer );       /* The callback function. */
-
-    /*
-     * Start the timer. (NOTE : this timer is a software timer)
-     */
-    configASSERT( xTimer );
-    xTimerStart( xTimer, mainDONT_BLOCK );
-
-    /* initialise GPIO */
-    GPIO_Init();
+    /* start your task here */
+    app_gpio();
 
     /*
      * Fire & Run. Start the tasks and timer running.
@@ -108,24 +70,6 @@ int main( void )
     mode from which main() is called is set in the C start up code and must be
     a privileged mode (not user mode). */
     for( ;; );
-}
-/*-----------------------------------------------------------*/
-
-static void prvLEDToggleTimer( TimerHandle_t pxTimer )
-{
-    /* Prevent compiler warnings. */
-    ( void ) pxTimer;
-
-    /*
-     * Just do something (i.e., toggle an LED)
-     * to show the application is running.
-     */
-    GPIO_Toggle( partstLED_OUTPUT );
-
-    /* read from button, you may press or not the button */
-    unsigned int val = GPIO_Read( partstBTN_INPUT );
-    xil_printf("button status = %d\n", val);
-
 }
 /*-----------------------------------------------------------*/
 

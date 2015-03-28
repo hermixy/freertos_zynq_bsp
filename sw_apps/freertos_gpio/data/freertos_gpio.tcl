@@ -5,7 +5,7 @@ proc swapp_get_name {} {
 }
 
 proc swapp_get_description {} {
-    return "This demo can use both AXI GPIO or PS GPIO to control LED (output) or Buttons (input) ! It is based on the 'hello, world !' demo we had create before and also uses a software timer. The driver are in the 'freertos_gpio.c' and it has support on both AXI- or PS- GPIO, but if you want to use AXI GPIO, you should re-create the block design. PS GPIO is the default, LED is at pin (47) while button is at pin (51), modify the settings the way you like.";
+    return "This demo can use both AXI GPIO or PS GPIO to control an LED (output) or a Button (input) ! It is based on (and slightly modified from) the 'hello, world' demo we had create before and also uses a software timer. The driver is 'freertos_gpio.c' and it supports both AXI- or PS- GPIO, but if you want to use AXI GPIO, you should re-create the block design and manually add the AXI GPIO IP. PS GPIO is the default. On microzed, the LED is at pin (47) while the button is at pin (51), modify the settings according to your needs.";
 }
 
 proc check_os {} {
