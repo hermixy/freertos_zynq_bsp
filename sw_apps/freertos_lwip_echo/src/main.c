@@ -2,7 +2,7 @@
  * main() do some house keeping job to make the whole program run.
  * It initialises two global control : GIC and WDT, for other program.
  *
- * It triggers mainTask() to call all the tasks.
+ * see 'app_timer.c' and 'app_lwip.c' for more details
  *
  * liu_benyuan <liubenyuan@gmail.com>
  */
@@ -11,6 +11,14 @@
 #include "FreeRTOS.h"
 #include "task.h"
 #include "semphr.h"
+
+/* lwIP includes. */
+#include "lwip/tcpip.h"
+
+/* XILINX includes. */
+#include "xparameters.h"
+#include "xscutimer.h"
+#include "xscugic.h"
 
 /*
  * Configure the hardware as necessary to run this demo.
@@ -41,17 +49,32 @@ XScuGic xInterruptController;
 
 /*-----------------------------------------------------------*/
 
+extern void lwIPAppsInit( void *pvArguments );
+extern void app_timer( void );
+
 int main( void )
 {
     /* Configure the hardware ready to run the demo. */
     prvSetupHardware();
 
-    /* start tasks */
-    extern void mainTask( void );
-    mainTask();
+    /* INIT lwIP and start lwIP tasks. */
+    tcpip_init( lwIPAppsInit, NULL );
 
-    /* should not reach here */
-    return 0;
+    /* starts timer APP */
+    app_timer();
+
+    /* Fire & Run. Start the tasks and timer running. */
+    vTaskStartScheduler();
+
+    /* If all is well, the scheduler will now be running, and the following
+    line will never be reached.  If the following line does execute, then
+    there was either insufficient FreeRTOS heap memory available for the idle
+    and/or timer tasks to be created, or vTaskStartScheduler() was called from
+    User mode.  See the memory management section on the FreeRTOS web site for
+    more details on the FreeRTOS heap http://www.freertos.org/a00111.html.  The
+    mode from which main() is called is set in the C start up code and must be
+    a privileged mode (not user mode). */
+    for( ;; );
 
 }
 /*-----------------------------------------------------------*/

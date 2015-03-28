@@ -1,6 +1,8 @@
-//
-
-/* a simple AXITimer driver */
+/*
+ * a simple AXITimer driver
+ *
+ * liu_benyuan <liubenyuan@gmail.com>
+ */
 
 /*
  * INIT -> CONFIG -> ISR -> START

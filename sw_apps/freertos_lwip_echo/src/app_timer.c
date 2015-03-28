@@ -14,6 +14,7 @@
 /* LED and Timers */
 #include "freertos_axitimer.h"
 #include "freertos_gpio.h"
+#include "freertos_buffer.h"
 
 /*-----------------------------------------------------------*/
 

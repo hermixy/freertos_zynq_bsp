@@ -5,7 +5,7 @@ proc swapp_get_name {} {
 }
 
 proc swapp_get_description {} {
-    return "This demo is also based on previous demos (PS GPIO and AXI Timer), while it has the capability of LwIP TCP/IP. We use only socket mode in this example. It consist a thread listen to the 27015 port. It receive any size of PC input (<4096 Bytes) and write a large chunk (=4*(65536 + 1024) bytes) every 100 ms."
+    return "This demo is also based on previous demos (PS GPIO and AXI Timer), while it enables the capability of LwIP TCP/IP. Here, we only use the socket mode in this simple example. It consist a listen thread binded to the 27015 port. It receive any size of PC input (<4096 Bytes) and tries to write a large chunk ( 4*(65536 + 1024) bytes ) every 100 ms. For this demo, I use 'math.h' and you need to link math, i.e., '-lm' in project settings."
 }
 
 proc check_os {} {
