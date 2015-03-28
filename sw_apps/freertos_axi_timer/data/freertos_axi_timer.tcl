@@ -5,7 +5,7 @@ proc swapp_get_name {} {
 }
 
 proc swapp_get_description {} {
-    return "This demo is based on previous demos (PS GPIO and Hello), while instead of the soft timers in 'hello, world !', it uses an AXI timer to generate an interrupt, then acknowledge this interrupt to toggle a LED indicator. So, from this demo, you may learn howto use AXI Timer, handle interrupt, and write the PS GPIO."
+    return "This demo is based on previous demos (PS GPIO and Hello), while instead of using soft timers in 'hello, world !', it uses an AXI timer to generate an interrupt, then acknowledge this interrupt to toggle an LED indicator. So, from this simple demo, you may learn howto use AXI Timer, handle interrupt, and write/read the PS GPIO."
 }
 
 proc check_os {} {
