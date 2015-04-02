@@ -1,2 +1,0 @@
-1. modify sys_arch.c;
-2. modify init.c, remove the last function in lwip_init();

@@ -1,0 +1,13 @@
+diff --git a/bsp/lwip141/src/lwip-1.4.1/src/core/init.c b/bsp/lwip141/src/lwip-1.4.1/src/core/init.c
+index ed334fd..a949966 100644
+--- a/bsp/lwip141/src/lwip-1.4.1/src/core/init.c
++++ b/bsp/lwip141/src/lwip-1.4.1/src/core/init.c
+@@ -368,7 +368,6 @@ lwip_init(void)
+      modes. The following call to lwip_sock_init() is made to make sure that lwIP is properly
+      initialized in both raw & socket modes with just a call to lwip_init().
+    */
+-   /* disable by liu_benyuan */
+-  //lwip_sock_init();
++  lwip_sock_init();
+ #endif
+ }
