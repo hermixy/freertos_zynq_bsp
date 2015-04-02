@@ -125,7 +125,6 @@ BEGIN OS freertos_zynq
     PARAM name = timer_task_priority, type = string, default = "(configMAX_PRIORITIES - 1)", desc = "The priority at which the software timer service/daemon task will execute.";
     PARAM name = timer_queue_length, type = int, default = 5, desc = "The number of commands the timer command queue can hold at any one time.";
     PARAM name = timer_task_stack_depth, type = string, default = "(configMINIMAL_STACK_SIZE * 2)", desc = "The size of the stack allocated to the timer service/daemon task.";
-    PARAM name = generate_run_time_stats, type = bool, default = true, desc = "private watchdog is used to generate run time stats, must define vInitialiseTimerForRunTimeStats() in application";
     PARAM name = command_int_max_output_size, type = int, default = 2096, desc = "The size of the global output buffer that is available for use when there are multiple command interpreters running at once (for example, one on a UART and one on TCP/IP).  This is done to prevent an output buffer being defined by each implementation - which would waste RAM.  In this case, there is only one command interpreter running.";
   END CATEGORY
 
@@ -135,28 +134,11 @@ BEGIN OS freertos_zynq
     PARAM name = use_malloc_failed_hook, type = bool, default = true, desc = "Only used if heap_1.c, heap_2.c or heap_3.c is included in the project.  Set to true for the kernel to call vApplicationMallocFailedHookHook() if there is insufficient FreeRTOS heap available for a task, queue or semaphore to be created.  The application must provide an implementation of vApplicationMallocFailedHook().";
     PARAM name = use_application_task_tag, type = bool, default = false, desc = "When using trace macros it is sometimes necessary to include task.h before FreeRTOS.h.";
     PARAM name = use_stack_overflow_hook, type = bool, default = true, desc = "";
-    PARAM name = use_idle_hook, type = bool, default = true, desc = "Set to true for the kernel to call vApplicationIdleHook() on each iteration of the idle task. The application must provide an implementation of vApplicationIdleHook().";
-    PARAM name = use_tick_hook, type = bool, default = true, desc = "Set to true for the kernel to call vApplicationTickHook() during each tick interrupt. The application must provide an implementation of vApplicationTickHook().";
+    PARAM name = use_idle_hook, type = bool, default = false, desc = "Set to true for the kernel to call vApplicationIdleHook() on each iteration of the idle task. The application must provide an implementation of vApplicationIdleHook().";
+    PARAM name = use_tick_hook, type = bool, default = false, desc = "Set to true for the kernel to call vApplicationTickHook() during each tick interrupt. The application must provide an implementation of vApplicationTickHook().";
+    PARAM name = generate_run_time_stats, type = bool, default = false, desc = "private watchdog is used to generate run time stats, must define vInitialiseTimerForRunTimeStats() in application";
   END CATEGORY
 
-  # interface with lwip [tested]
-  BEGIN CATEGORY network_options
-    PARAM name = network_options, type = bool, default = true, desc = "Network configuration settings - only used when the lwIP example is built.", permit = user;
-    PARAM name = mac_addr0, type = string, default = "0x00", desc "MAC";
-    PARAM name = mac_addr1, type = string, default = "0x13", desc "MAC";
-    PARAM name = mac_addr2, type = string, default = "0x14", desc "MAC";
-    PARAM name = mac_addr3, type = string, default = "0x15", desc "MAC";
-    PARAM name = mac_addr4, type = string, default = "0x15", desc "MAC";
-    PARAM name = mac_addr5, type = string, default = "0x16", desc "MAC";
-    PARAM name = ip_addr0, type = int, default = 192, desc = "IP";
-    PARAM name = ip_addr1, type = int, default = 168, desc = "IP";
-    PARAM name = ip_addr2, type = int, default = 1, desc = "IP";
-    PARAM name = ip_addr3, type = int, default = 10, desc = "IP";
-    PARAM name = net_mask0, type = int, default = 255, desc = "MASK";
-    PARAM name = net_mask1, type = int, default = 255, desc = "MASK";
-    PARAM name = net_mask2, type = int, default = 255, desc = "MASK";
-    PARAM name = net_mask3, type = int, default = 0, desc = "MASK";
-  END CATEGORY
 END OS
 
 ##
