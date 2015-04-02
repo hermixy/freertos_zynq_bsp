@@ -1,3 +1,5 @@
+##
+
 OPTION psf_version = 2.1.0 ;
 
 BEGIN LIBRARY lwip140
@@ -37,14 +39,16 @@ BEGIN LIBRARY lwip140
   BEGIN CATEGORY lwip_memory_options
     PROPERTY desc = "lwIP memory options"
     PARAM name = lwip_memory_options, desc = "Options controlling lwIP memory usage", type = bool, default = true, permit = none;
-    PARAM name = mem_size, desc = "Size of the heap memory (bytes). If the application will send a lot of data that needs to be copied, this should be set high", type = string, default = 0x200000;
+    PARAM name = mem_libc_malloc, desc = "Use malloc/free/realloc provided by your C-library instead of the lwip internal allocator.", type = bool, default = false;
+    PARAM name = memp_mem_malloc, desc = "Use mem_malloc/mem_free instead of the lwip pool allocator.", type = bool, default = false;
+    PARAM name = mem_size, desc = "Size of the heap memory (bytes). If the application will send a lot of data that needs to be copied, this should be set high", type = string, default = 0x100000;
     PARAM name = memp_n_pbuf, desc = "Number of memp struct pbufs. Set this high if application sends lot of data out of ROM", type = int, default = 16;
     PARAM name = lwip_raw, desc = "raw connection", type = int, default = 0;
     PARAM name = memp_n_raw_pcb, desc = "Number of active UDP PCBs. One per active RAW connection", type = int, default = 0;
     PARAM name = memp_n_udp_pcb, desc = "Number of active UDP PCBs. One per active UDP connection", type = int, default = 4;
     PARAM name = memp_n_tcp_pcb, desc = "Number of active TCP PCBs. One per active TCP connection", type = int, default = 8;
     PARAM name = memp_n_tcp_pcb_listen, desc = "Number of listening TCP connections", type = int, default = 8;
-    PARAM name = memp_n_tcp_seg, desc = "Number of simultaneously queued TCP segments", type = int, default = 512;
+    PARAM name = memp_n_tcp_seg, desc = "Number of simultaneously queued TCP segments", type = int, default = 256;
     PARAM name = memp_n_sys_timeout, desc = "Number of simultaneously active timeouts", type = int, default = 8;
     PARAM name = memp_num_netbuf, desc = "Number of struct netbufs (socket mode only)", type = int, default = 8;
     PARAM name = memp_num_netconn, desc = "Number of struct netconns (socket mode only)", type = int, default = 16;
@@ -56,7 +60,7 @@ BEGIN LIBRARY lwip140
   BEGIN CATEGORY pbuf_options
     PROPERTY desc = "Pbuf Related Options";
     PARAM name = pbuf_options, desc = "Pbuf Options", type = bool, default = true, permit = none;
-    PARAM name = pbuf_pool_size, desc = "Number of buffers in pbuf pool. Pbuf is often related with the receive window, so set this high if you are going to receive large amount of data", type = int, default = 512;
+    PARAM name = pbuf_pool_size, desc = "Number of buffers in pbuf pool. Pbuf is often related with the receive window, so set this high if you are going to receive large amount of data", type = int, default = 256;
     PARAM name = pbuf_pool_bufsize, desc = "Size of each pbuf in pbuf pool.", type = int, default = 1700;
     PARAM name = pbuf_link_hlen, desc = "Number of bytes that should be allocated for a link level header.", type = int, default = 16, permit = none;
   END CATEGORY
@@ -68,11 +72,11 @@ BEGIN LIBRARY lwip140
     PARAM name = tcp_ttl, desc = "TCP TTL value", type = int, default = 255;
     PARAM name = tcp_queue_ooseq, desc = "Should TCP queue segments arriving out of order. Set to 0 if your device is low on memory", type = bool, default = true;
     PARAM name = tcp_mss, desc = "TCP Maximum segment size (bytes), standard = 1460", type = int, default = 1024;
-    PARAM name = tcp_snd_buf, desc = "TCP sender buffer space (bytes), suggest be a multiple of TCP_MSS.", type = string, default = (32*TCP_MSS);
+    PARAM name = tcp_snd_buf, desc = "TCP sender buffer space (bytes), suggest be a multiple of TCP_MSS.", type = string, default = (2*TCP_MSS);
     PARAM name = tcp_wnd, desc = "TCP Window (bytes), at least 2x tcp_mss.", type = string, default = (4*TCP_MSS);
     PARAM name = tcp_maxrtx, desc = "TCP Maximum retransmission value", type = int, default = 12;
     PARAM name = tcp_synmaxrtx, desc = "TCP Maximum SYN retransmission value", type = int, default = 4;
-    PARAM name = lwip_tcp_keepalive, desc = "Enable Keepalive options processing", type = bool, default = false;
+    PARAM name = lwip_tcp_keepalive, desc = "Enable keepalive options processing", type = bool, default = false;
     PARAM name = lwip_so_rcvtimeo, desc = "Enable Receive Timeout", type = bool, default = false;
   END CATEGORY
 
@@ -129,19 +133,19 @@ BEGIN LIBRARY lwip140
 
   BEGIN CATEGORY stats_options
     PARAM name = stats_options, desc = "lwIP Statistics Options" type = bool, default = true, permit = none;
-    PARAM name = lwip_stats, desc = "Turn on lwIP statistics", type = bool, default = true;
+    PARAM name = lwip_stats, desc = "Turn on lwIP statistics", type = bool, default = false;
     PARAM name = lwip_stats_display, desc = "Enable and Display lwIP statistics", type = bool, default = false;
-    PARAM name = link_stats, desc = "", type = bool, default = true;
-    PARAM name = ip_stats, desc = "", type = bool, default = true;
+    PARAM name = link_stats, desc = "", type = bool, default = false;
+    PARAM name = ip_stats, desc = "", type = bool, default = false;
     PARAM name = icmp_stats, desc = "", type = bool, default = false;
     PARAM name = igmp_stats, desc = "", type = bool, default = false;
     PARAM name = ipfrag_stats, desc = "", type = bool, default = false;
-    PARAM name = udp_stats, desc = "", type = bool, default = true;
-    PARAM name = tcp_stats, desc = "", type = bool, default = true;
-    PARAM name = mem_stats, desc = "", type = bool, default = true;
-    PARAM name = memp_stats, desc = "", type = bool, default = true;
-    PARAM name = pbuf_stats, desc = "", type = bool, default = true;
-    PARAM name = sys_stats, desc = "", type = bool, default = true;
+    PARAM name = udp_stats, desc = "", type = bool, default = false;
+    PARAM name = tcp_stats, desc = "", type = bool, default = false;
+    PARAM name = mem_stats, desc = "", type = bool, default = false;
+    PARAM name = memp_stats, desc = "", type = bool, default = false;
+    PARAM name = pbuf_stats, desc = "", type = bool, default = false;
+    PARAM name = sys_stats, desc = "", type = bool, default = false;
   END CATEGORY
 
   BEGIN CATEGORY ppp_options
