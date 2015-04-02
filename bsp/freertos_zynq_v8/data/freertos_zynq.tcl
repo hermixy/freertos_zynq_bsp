@@ -58,6 +58,8 @@
 # within the industry and is intended to ensure information accuracy).
 #
 
+# hi !
+# liu_benyuan <liubenyuan@gmail.com>
 
 # standalone bsp version. set this to the latest "ACTIVE" version.
 #set standalone_version standalone_v3_10_a
@@ -259,7 +261,10 @@ proc generate {os_handle} {
     puts $config_file "\#define configUSE_TICK_HOOK $use_tick_hook"
 
     set max_priorities [get_property CONFIG.max_priorities $os_handle]
+    puts $config_file ""
     puts $config_file "\#define configMAX_PRIORITIES ( $max_priorities )"
+    puts $config_file "\#define tskIDLE_PRIORITIES ( 0U )"
+    puts $config_file ""
 
     set minimal_stack_size [get_property CONFIG.minimal_stack_size $os_handle]
     puts $config_file "\#define configMINIMAL_STACK_SIZE ( (unsigned short) $minimal_stack_size )"
@@ -398,40 +403,6 @@ proc generate {os_handle} {
     puts $config_file ""
 
     # network options
-    puts $config_file ""
-
-    set mac_addr0 [get_property CONFIG.mac_addr0 $os_handle]
-    set mac_addr1 [get_property CONFIG.mac_addr1 $os_handle]
-    set mac_addr2 [get_property CONFIG.mac_addr2 $os_handle]
-    set mac_addr3 [get_property CONFIG.mac_addr3 $os_handle]
-    set mac_addr4 [get_property CONFIG.mac_addr4 $os_handle]
-    set mac_addr5 [get_property CONFIG.mac_addr5 $os_handle]
-    puts $config_file "\#define configMAC_ADDR0 $mac_addr0"
-    puts $config_file "\#define configMAC_ADDR1 $mac_addr1"
-    puts $config_file "\#define configMAC_ADDR2 $mac_addr2"
-    puts $config_file "\#define configMAC_ADDR3 $mac_addr3"
-    puts $config_file "\#define configMAC_ADDR4 $mac_addr4"
-    puts $config_file "\#define configMAC_ADDR5 $mac_addr5"
-    puts $config_file ""
-
-    set ip_addr0 [get_property CONFIG.ip_addr0 $os_handle]
-    set ip_addr1 [get_property CONFIG.ip_addr1 $os_handle]
-    set ip_addr2 [get_property CONFIG.ip_addr2 $os_handle]
-    set ip_addr3 [get_property CONFIG.ip_addr3 $os_handle]
-    puts $config_file "\#define configIP_ADDR0 $ip_addr0"
-    puts $config_file "\#define configIP_ADDR1 $ip_addr1"
-    puts $config_file "\#define configIP_ADDR2 $ip_addr2"
-    puts $config_file "\#define configIP_ADDR3 $ip_addr3"
-    puts $config_file ""
-
-    set net_mask0 [get_property CONFIG.net_mask0 $os_handle]
-    set net_mask1 [get_property CONFIG.net_mask1 $os_handle]
-    set net_mask2 [get_property CONFIG.net_mask2 $os_handle]
-    set net_mask3 [get_property CONFIG.net_mask3 $os_handle]
-    puts $config_file "\#define configNET_MASK0 $net_mask0"
-    puts $config_file "\#define configNET_MASK1 $net_mask1"
-    puts $config_file "\#define configNET_MASK2 $net_mask2"
-    puts $config_file "\#define configNET_MASK3 $net_mask3"
     puts $config_file ""
 
     # complete the header protectors
