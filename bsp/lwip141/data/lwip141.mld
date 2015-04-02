@@ -32,7 +32,7 @@ BEGIN LIBRARY lwip141
   BEGIN CATEGORY lwip_memory_options
     PROPERTY desc = "lwIP memory options"
     PARAM name = lwip_memory_options, desc = "Options controlling lwIP memory usage"
-    PARAM name = mem_size, desc = "Size of the heap memory (bytes).", type = int, default = 131072;
+    PARAM name = mem_size, desc = "Size of the heap memory (bytes).", type = string, default = 0x20000;
     PARAM name = memp_n_pbuf, desc = "Number of memp struct pbufs. Set this high if application sends lot of data out of ROM", type = int, default = 16;
     PARAM name = memp_n_udp_pcb, desc = "Number of active UDP PCBs. One per active UDP connection", type = int, default = 4;
     PARAM name = memp_n_tcp_pcb, desc = "Number of active TCP PCBs. One per active TCP connection", type = int, default = 32;
@@ -91,12 +91,12 @@ BEGIN LIBRARY lwip141
   END CATEGORY
 
   BEGIN CATEGORY tcp_options
-    OPERTY desc = "lwIP TCP options";
+    PROPERTY desc = "lwIP TCP options";
     PARAM name = tcp_options, desc = "Is TCP required ?", type = bool, default = true, permit = none;
     PARAM name = lwip_tcp, desc = "Is TCP required ?", type = bool, default = true;
-    PARAM name = tcp_wnd, desc = "TCP Window (bytes)", type = int, default = 2048;
-    PARAM name = tcp_snd_buf, desc = "TCP sender buffer space (bytes)", type = int, default = 8192;
-    PARAM name = tcp_mss, desc = "TCP Maximum segment size (bytes)", type = int, default = 1460;
+    PARAM name = tcp_wnd, desc = "TCP Window (bytes), should be 2 x TCP_MSS minimal", type = int, default = 4096;
+    PARAM name = tcp_snd_buf, desc = "TCP sender buffer space (bytes)", type = int, default = 4096;
+    PARAM name = tcp_mss, desc = "TCP Maximum segment size (bytes)", type = int, default = 1024;
     PARAM name = tcp_ttl, desc = "TCP TTL value", type = int, default = 255;
     PARAM name = tcp_maxrtx, desc = "TCP Maximum retransmission value", type = int, default = 12;
     PARAM name = tcp_synmaxrtx, desc = "TCP Maximum SYN retransmission value", type = int, default = 4;
