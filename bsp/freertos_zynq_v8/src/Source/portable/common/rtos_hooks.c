@@ -1,5 +1,8 @@
 #include "rtos_hooks.h"
 
+/* please remove DEBUG in release version */
+#define DBG_HOOKS ( 1 )
+
 void vAssertCalled( const char * pcFile, unsigned long ulLine )
 {
 volatile unsigned long ul = 0;
@@ -26,7 +29,6 @@ volatile unsigned long ul = 0;
 
 /* enable debug for RTOS hooks
  * can be removed when the code is stable */
-#define DBG_HOOKS 0
 
 #if(configUSE_HOOKS && configUSE_MALLOC_FAILED_HOOK)
 void vApplicationMallocFailedHook( void )
