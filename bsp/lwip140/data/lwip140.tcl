@@ -577,6 +577,14 @@ proc generate_lwip_opts {libhandle} {
     puts $lwipopts_fd ""
 
     # memory options
+	set mem_libc_malloc          [expr [get_property CONFIG.mem_libc_malloc $libhandle]==true]
+	set memp_mem_malloc          [expr [get_property CONFIG.memp_mem_malloc $libhandle]==true]
+	if {$mem_libc_malloc == 1} {
+	    puts $lwipopts_fd "\#define MEM_LIBC_MALLOC 1"
+	}
+	if {$memp_mem_malloc == 1} {
+	    puts $lwipopts_fd "\#define MEMP_MEM_MALLOC 1"
+	}
     set mem_size                 [get_property CONFIG.mem_size $libhandle]
     set memp_n_pbuf              [get_property CONFIG.memp_n_pbuf $libhandle]
     set lwip_raw                 [get_property CONFIG.lwip_raw $libhandle]
@@ -613,7 +621,7 @@ proc generate_lwip_opts {libhandle} {
         puts $lwipopts_fd "\#define MEMP_NUM_NETCONN    $memp_num_netconn"
         puts $lwipopts_fd "\#define MEMP_NUM_TCPIP_MSG_API    $memp_num_tcpip_msg_api"
         puts $lwipopts_fd "\#define MEMP_NUM_TCPIP_MSG_INPKT  $memp_num_tcpip_msg_inpkt"
-        # puts $lwipopts_fd "\#define LWIP_PROVIDE_ERRNO  1"
+        # puts $lwipopts_fd "\#define LWIP_PROVIDE_ERRNO 1"
         # enable LWIP_PROVIDE_ERRNO by cc.h
     }
     puts $lwipopts_fd "\#define MEMP_NUM_ARP_QUEUE $memp_num_arp_queue"
@@ -636,7 +644,7 @@ proc generate_lwip_opts {libhandle} {
     set lwip_so_rcvtimeo   [get_property CONFIG.lwip_so_rcvtimeo $libhandle]
     set lwip_tcp_keepalive [get_property CONFIG.lwip_tcp_keepalive $libhandle]
     set tcp_ttl            [get_property CONFIG.tcp_ttl $libhandle]
-    set tcp_queue_ooseq    [get_property CONFIG.tcp_queue_ooseq $libhandle]
+    set tcp_queue_ooseq    [expr [get_property CONFIG.tcp_queue_ooseq $libhandle] == true]
     set tcp_mss            [get_property CONFIG.tcp_mss $libhandle]
     set tcp_snd_buf        [get_property CONFIG.tcp_snd_buf $libhandle]
     set tcp_wnd            [get_property CONFIG.tcp_wnd $libhandle]
@@ -661,7 +669,7 @@ proc generate_lwip_opts {libhandle} {
     puts $lwipopts_fd "\#define TCP_MSS $tcp_mss"
     puts $lwipopts_fd "\#define TCP_WND $tcp_wnd"
     puts $lwipopts_fd "\#define TCP_SND_BUF $tcp_snd_buf"
-    puts $lwipopts_fd "\#define TCP_SND_QUEUELEN (16 * TCP_SND_BUF/TCP_MSS)"
+    puts $lwipopts_fd "\#define TCP_SND_QUEUELEN (16 * TCP_SND_BUF / TCP_MSS)"
     puts $lwipopts_fd "\#define TCP_SNDLOWAT (TCP_SND_BUF / 2)"
     puts $lwipopts_fd "\#define TCP_MAXRTX $tcp_maxrtx"
     puts $lwipopts_fd "\#define TCP_SYNMAXRTX $tcp_synmaxrtx"
@@ -728,7 +736,7 @@ proc generate_lwip_opts {libhandle} {
     puts $lwipopts_fd ""
 
     # lwIP stats
-    set lwip_stats [expr [get_property CONFIG.lwip_stats $libhandle] == true]
+    set lwip_stats   [expr [get_property CONFIG.lwip_stats $libhandle] == true]
     set lwip_stats_display [expr [get_property CONFIG.lwip_stats_display $libhandle] == true]
     set link_stats   [expr [get_property CONFIG.link_stats $libhandle] == true]
     set ip_stats     [expr [get_property CONFIG.ip_stats $libhandle] == true]
