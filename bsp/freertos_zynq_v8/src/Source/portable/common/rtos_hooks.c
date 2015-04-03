@@ -1,7 +1,7 @@
 #include "rtos_hooks.h"
 
 /* please remove DEBUG in release version */
-#define DBG_HOOKS ( 1 )
+#define DBG_HOOKS ( 0 )
 
 void vAssertCalled( const char * pcFile, unsigned long ulLine )
 {
