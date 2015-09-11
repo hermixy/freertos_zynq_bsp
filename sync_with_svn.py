@@ -78,6 +78,7 @@ srcs = path.join(source, r'FreeRTOS/Demo/Common/ethernet/lwip-1.4.0/')
 dest_srcs = path.join(dest, r'bsp/lwip140/src/lwip-1.4.0/')
 # warning, delete tree before copy !
 if path.exists(dest_srcs):
+    print("remove dir trees")
     rmtree(dest_srcs)
 print("from " + srcs)
 print("to " + dest_srcs)
@@ -87,6 +88,7 @@ srcs = path.join(source, r'FreeRTOS/Demo/CORTEX_A9_Zynq_ZC702/RTOSDemo/src/lwIP_
 dest_srcs = path.join(dest, r'bsp/lwip140/src/contrib/ports/xilinx')
 # warning, delete tree before copy !
 if path.exists(dest_srcs):
+    print("remove dir trees")
     rmtree(dest_srcs)
 print("from " + srcs)
 print("to " + dest_srcs)
