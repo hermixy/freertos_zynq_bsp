@@ -52,7 +52,7 @@ with open(fp, "wb") as fid:
     for line in lines:
         line = re.sub("_freertos_vector_table", "_vector_table", line);
         line = re.sub(".freertos_vectors", ".vectors", line);
-        fid.write(line)
+        fid.write(bytes(line, 'UTF-8'))
 
 #
 f = path.join(source,"FreeRTOS/Demo/CORTEX_A9_Zynq_ZC702/RTOSDemo/src/FreeRTOS_tick_config.c")
@@ -66,7 +66,7 @@ with open(fp, "rU") as fid:
 with open(fp, "wb") as fid:
     for line in lines:
         line = re.sub("static XScuGic", "extern XScuGic", line);
-        fid.write(line)
+        fid.write(bytes(line, 'UTF-8'))
 
 f = path.join(source,"FreeRTOS/Demo/CORTEX_A9_Zynq_ZC702/RTOSDemo/src/FreeRTOSConfig.h")
 print(f)
