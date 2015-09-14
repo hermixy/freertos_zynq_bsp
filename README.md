@@ -14,13 +14,13 @@ The demo files of `CORTEX_A9_Zynq_ZC702` are available from official svn or via 
 ## supported drivers
 
 Currently, the support drivers are :
-- **DONE** FreeRTOS CLI package,
-- **DONE** lwIP package,
+- [x] FreeRTOS CLI package,
+- [x] lwIP package,
 
 TODO list :
-- **add** other demos and sw apps in the `Demo/common` folder,
-- **add** board-aware (like LED toggling, buttons etc.,) demos to the package,
-- **add** matrix algebra package.
+- [ ] other demos and sw apps in the `Demo/common` folder,
+- [ ] board-aware (like LED toggling, buttons etc.,) demos to the package,
+- [ ] matrix algebra package.
 
 ## Instructions
 
