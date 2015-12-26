@@ -64,7 +64,7 @@ BEGIN OS freertos_zynq
   OPTION DRC = FreeRTOS_drc ;
   OPTION supported_peripherals = ps7_cortexa9;
   OPTION COPYFILES = all;
-  OPTION DEPENDS = (standalone_v4_2);
+  OPTION DEPENDS = (standalone_v5_1);
   #OPTION requires_os = (standalone xilkernel);
   #OPTION APP_COMPILER_FLAGS = "-D__USE_AMP__";
   OPTION APP_LINKER_FLAGS = "-Wl,--start-group,-lxil,-lfreertos,-lgcc,-lc,--end-group";

@@ -63,7 +63,8 @@
 
 # standalone bsp version. set this to the latest "ACTIVE" version.
 #set standalone_version standalone_v3_10_a
-set standalone_version standalone_v4_2
+#set standalone_version standalone_v4_2
+set standalone_version standalone_v5_1
 
 proc FreeRTOS_drc {os_handle} {
 
