@@ -1,5 +1,5 @@
 /*
-    FreeRTOS V8.2.2 - Copyright (C) 2015 Real Time Engineers Ltd.
+    FreeRTOS V8.2.3 - Copyright (C) 2015 Real Time Engineers Ltd.
     All rights reserved
 
     VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
@@ -8,7 +8,7 @@
 
     FreeRTOS is free software; you can redistribute it and/or modify it under
     the terms of the GNU General Public License (version 2) as published by the
-    Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
+    Free Software Foundation >>>> AND MODIFIED BY <<<< the FreeRTOS exception.
 
     ***************************************************************************
     >>!   NOTE: The modification to the GPL is included to allow you to     !<<
@@ -78,6 +78,7 @@
 #define XSCUTIMER_CLOCK_HZ ( XPAR_CPU_CORTEXA9_0_CPU_CLK_FREQ_HZ / 2UL )
 
 static XScuTimer xTimer;
+XScuGic xInterruptController; 	/* Interrupt controller instance */
 
 /*
  * The application must provide a function that configures a peripheral to
@@ -87,7 +88,6 @@ static XScuTimer xTimer;
  */
 void vConfigureTickInterrupt( void )
 {
-extern XScuGic xInterruptController; 	/* Interrupt controller instance */
 BaseType_t xStatus;
 extern void FreeRTOS_Tick_Handler( void );
 XScuTimer_Config *pxTimerConfig;

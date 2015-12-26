@@ -1,5 +1,5 @@
 /*
-    FreeRTOS V8.2.2 - Copyright (C) 2015 Real Time Engineers Ltd.
+    FreeRTOS V8.2.3 - Copyright (C) 2015 Real Time Engineers Ltd.
     All rights reserved
 
     VISIT http://www.FreeRTOS.org TO ENSURE YOU ARE USING THE LATEST VERSION.
@@ -8,7 +8,7 @@
 
     FreeRTOS is free software; you can redistribute it and/or modify it under
     the terms of the GNU General Public License (version 2) as published by the
-    Free Software Foundation >>!AND MODIFIED BY!<< the FreeRTOS exception.
+    Free Software Foundation >>>> AND MODIFIED BY <<<< the FreeRTOS exception.
 
     ***************************************************************************
     >>!   NOTE: The modification to the GPL is included to allow you to     !<<
@@ -178,6 +178,16 @@ PRIVILEGED_DATA static QueueHandle_t xTimerQueue = NULL;
 
 /*-----------------------------------------------------------*/
 
+#if( configSUPPORT_STATIC_ALLOCATION == 1 )
+
+	/* If static allocation is supported then the application must provide the
+	following callback function - which enables the application to optionally
+	provide the memory that will be used by the timer task as the task's stack
+	and TCB. */
+	extern void vApplicationGetTimerTaskMemory( DummyTCB_t **ppxTimerTaskTCBBuffer, StackType_t **ppxTimerTaskStackBuffer, uint16_t *pusTimerTaskStackSize );
+
+#endif
+
 /*
  * Initialise the infrastructure used by the timer service task if it has not
  * been initialised already.
@@ -233,13 +243,17 @@ static TickType_t prvGetNextExpireTime( BaseType_t * const pxListWasEmpty ) PRIV
  * If a timer has expired, process it.  Otherwise, block the timer service task
  * until either a timer does expire or a command is received.
  */
-static void prvProcessTimerOrBlockTask( const TickType_t xNextExpireTime, const BaseType_t xListWasEmpty ) PRIVILEGED_FUNCTION;
+static void prvProcessTimerOrBlockTask( const TickType_t xNextExpireTime, BaseType_t xListWasEmpty ) PRIVILEGED_FUNCTION;
 
 /*-----------------------------------------------------------*/
 
 BaseType_t xTimerCreateTimerTask( void )
 {
 BaseType_t xReturn = pdFAIL;
+DummyTCB_t *pxTimerTaskTCBBuffer = NULL;
+StackType_t *pxTimerTaskStackBuffer = NULL;
+uint16_t usTimerTaskStackSize = configTIMER_TASK_STACK_DEPTH;
+
 
 	/* This function is called when the scheduler is started if
 	configUSE_TIMERS is set to 1.  Check that the infrastructure used by the
@@ -249,16 +263,24 @@ BaseType_t xReturn = pdFAIL;
 
 	if( xTimerQueue != NULL )
 	{
+
+		#if( configSUPPORT_STATIC_ALLOCATION == 1 )
+		{
+			vApplicationGetTimerTaskMemory( &pxTimerTaskTCBBuffer, &pxTimerTaskStackBuffer, &usTimerTaskStackSize );
+		}
+		#endif /* configSUPPORT_STATIC_ALLOCATION */
+
+
 		#if ( INCLUDE_xTimerGetTimerDaemonTaskHandle == 1 )
 		{
 			/* Create the timer task, storing its handle in xTimerTaskHandle so
 			it can be returned by the xTimerGetTimerDaemonTaskHandle() function. */
-			xReturn = xTaskCreate( prvTimerTask, "Tmr Svc", ( uint16_t ) configTIMER_TASK_STACK_DEPTH, NULL, ( ( UBaseType_t ) configTIMER_TASK_PRIORITY ) | portPRIVILEGE_BIT, &xTimerTaskHandle );
+			xReturn = xTaskGenericCreate( prvTimerTask, "Tmr Svc", usTimerTaskStackSize, NULL, ( ( UBaseType_t ) configTIMER_TASK_PRIORITY ) | portPRIVILEGE_BIT, &xTimerTaskHandle, pxTimerTaskStackBuffer, pxTimerTaskTCBBuffer, NULL );
 		}
 		#else
 		{
 			/* Create the timer task without storing its handle. */
-			xReturn = xTaskCreate( prvTimerTask, "Tmr Svc", ( uint16_t ) configTIMER_TASK_STACK_DEPTH, NULL, ( ( UBaseType_t ) configTIMER_TASK_PRIORITY ) | portPRIVILEGE_BIT, NULL);
+			xReturn = xTaskGenericCreate( prvTimerTask, "Tmr Svc", usTimerTaskStackSize, NULL, ( ( UBaseType_t ) configTIMER_TASK_PRIORITY ) | portPRIVILEGE_BIT, NULL, pxTimerTaskStackBuffer, pxTimerTaskTCBBuffer, NULL );
 		}
 		#endif
 	}
@@ -318,6 +340,8 @@ BaseType_t xTimerGenericCommand( TimerHandle_t xTimer, const BaseType_t xCommand
 BaseType_t xReturn = pdFAIL;
 DaemonTaskMessage_t xMessage;
 
+	configASSERT( xTimer );
+
 	/* Send a message to the timer service task to perform a particular action
 	on a particular timer definition. */
 	if( xTimerQueue != NULL )
@@ -371,6 +395,7 @@ const char * pcTimerGetTimerName( TimerHandle_t xTimer )
 {
 Timer_t *pxTimer = ( Timer_t * ) xTimer;
 
+	configASSERT( xTimer );
 	return pxTimer->pcTimerName;
 }
 /*-----------------------------------------------------------*/
@@ -439,7 +464,7 @@ BaseType_t xListWasEmpty;
 }
 /*-----------------------------------------------------------*/
 
-static void prvProcessTimerOrBlockTask( const TickType_t xNextExpireTime, const BaseType_t xListWasEmpty )
+static void prvProcessTimerOrBlockTask( const TickType_t xNextExpireTime, BaseType_t xListWasEmpty )
 {
 TickType_t xTimeNow;
 BaseType_t xTimerListsWereSwitched;
@@ -468,6 +493,13 @@ BaseType_t xTimerListsWereSwitched;
 				received - whichever comes first.  The following line cannot
 				be reached unless xNextExpireTime > xTimeNow, except in the
 				case when the current timer list is empty. */
+				if( xListWasEmpty != pdFALSE )
+				{
+					/* The current timer list is empty - is the overflow list
+					also empty? */
+					xListWasEmpty = listLIST_IS_EMPTY( pxOverflowTimerList );
+				}
+
 				vQueueWaitForMessageRestricted( xTimerQueue, ( xNextExpireTime - xTimeNow ), xListWasEmpty );
 
 				if( xTaskResumeAll() == pdFALSE )
@@ -809,6 +841,8 @@ BaseType_t xTimerIsTimerActive( TimerHandle_t xTimer )
 {
 BaseType_t xTimerIsInActiveList;
 Timer_t *pxTimer = ( Timer_t * ) xTimer;
+
+	configASSERT( xTimer );
 
 	/* Is the timer in the list of active timers? */
 	taskENTER_CRITICAL();

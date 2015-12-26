@@ -19,6 +19,7 @@ Fetch updates
 ```bash
 $ git checkout svn
 $ git svn fetch
-$ git merge master
+$ git checkout master
+$ git svn rebase
 ```
 
