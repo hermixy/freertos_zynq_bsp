@@ -1,0 +1,8 @@
+Is the Blackfin the sender or the receiver (or both) in this scenario?
+ 
+We have seen numbers up to 11MBytes/sec, obviously depending on buffer sizes, network activity, available processor bandwidth, etc.
+ 
+LwIP can be configured depending on your application requirements. LwIP is statically configurable, and most of the options can be changed in 'lwipopts.h' present in "...\Blackfin\lib\src\lwip\contrib\ports\adsp-blackfin\proj\lwipv4lib\". A modified version, 'lwipopts.big.h', is provided for applications that potentially transfer large amounts of TCP data. Some critical changes in 'lwipopts.big.h' from that of the default 'lwipopts.h' include:
+        -RAM size increased from 64K to 1MB
+        -TCP window size increased from 8K to 32K
+        -Send Queue Length changed from 16 to 256.
