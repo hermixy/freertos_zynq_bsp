@@ -11,7 +11,7 @@ BEGIN LIBRARY lwip141
   OPTION NAME = lwip141;
 
   PARAM name = api_mode, desc = "Mode of operation for lwIP (RAW API/Sockets API)", type = enum, values = ("RAW API" = RAW_API, "SOCKET API" = SOCKET_API), default = SOCKET_API;
-  PARAM name = socket_mode_thread_prio, desc = "Priority of threads in socket mode", type = int, default = 3;
+  PARAM name = socket_mode_thread_prio, desc = "Priority of threads in socket mode", type = int, default = 4;
   PARAM name = use_axieth_on_zynq, desc = "Option if set to 1 ensures axiethernet adapter being used in Zynq. Valid only for Zynq", type = int, default = 0;
 
   BEGIN CATEGORY temac_adapter_options
@@ -33,22 +33,22 @@ BEGIN LIBRARY lwip141
     PROPERTY desc = "lwIP memory options"
     PARAM name = lwip_memory_options, desc = "Options controlling lwIP memory usage"
     PARAM name = mem_size, desc = "Size of the heap memory (bytes).", type = string, default = 0x80000;
-    PARAM name = memp_n_pbuf, desc = "Number of memp struct pbufs. Set this high if application sends lot of data out of ROM. If you are going to transfer large amount of data, set this as high as possible", type = int, default = 512;
+    PARAM name = memp_n_pbuf, desc = "Number of memp struct pbufs. Set this high if application sends lot of data out of ROM. If you are going to transfer large amount of data, set this as high as possible", type = int, default = 256;
     PARAM name = memp_n_udp_pcb, desc = "Number of active UDP PCBs. One per active UDP connection", type = int, default = 4;
     PARAM name = memp_n_tcp_pcb, desc = "Number of active TCP PCBs. One per active TCP connection", type = int, default = 32;
     PARAM name = memp_n_tcp_pcb_listen, desc = "Number of listening TCP connections", type = int, default = 8;
     PARAM name = memp_n_tcp_seg, desc = "Number of simultaneously queued TCP segments", type = int, default = 256;
     PARAM name = memp_n_sys_timeout, desc = "Number of simultaneously active timeouts", type = int, default = 16;
-    PARAM name = memp_num_netbuf, desc = "Number of struct netbufs (socket mode only)", type = int, default = 32;
-    PARAM name = memp_num_netconn, desc = "Number of struct netconns (socket mode only)", type = int, default = 40;
-    PARAM name = memp_num_api_msg, desc = "Number of api msg structures (socket mode only)", type = int, default = 64;
-    PARAM name = memp_num_tcpip_msg, desc = "Number of tcpip msg structures (socket mode only)", type = int, default = 64;
+    PARAM name = memp_num_netbuf, desc = "Number of struct netbufs (socket mode only)", type = int, default = 16;
+    PARAM name = memp_num_netconn, desc = "Number of struct netconns (socket mode only)", type = int, default = 8;
+    PARAM name = memp_num_api_msg, desc = "Number of api msg structures (socket mode only)", type = int, default = 16;
+    PARAM name = memp_num_tcpip_msg, desc = "Number of tcpip msg structures (socket mode only)", type = int, default = 16;
   END CATEGORY
 
   BEGIN CATEGORY pbuf_options
     PROPERTY desc = "Pbuf Related Options";
     PARAM name = pbuf_options, desc = "Pbuf Options", type = bool, default = true, permit = none;	
-    PARAM name = pbuf_pool_size, desc = "Number of buffers in pbuf pool.", type = int, default = 512;
+    PARAM name = pbuf_pool_size, desc = "Number of buffers in pbuf pool.", type = int, default = 256;
     PARAM name = pbuf_pool_bufsize, desc = "Size of each pbuf in pbuf pool.", type = int, default = 2048;
     PARAM name = pbuf_link_hlen, desc = "Number of bytes that should be allocated for a link level header.", type = int, default = 16, permit = none;
   END CATEGORY
@@ -86,7 +86,7 @@ BEGIN LIBRARY lwip141
   BEGIN CATEGORY udp_options
     PROPERTY desc = "UDP Options";
     PARAM name = udp_options, desc = "Is UDP required ?", type = bool, default = true, permit = none;
-    PARAM name = lwip_udp, desc = "Is UDP required ?", type = bool, default = false;
+    PARAM name = lwip_udp, desc = "Is UDP required ?", type = bool, default = true;
     PARAM name = udp_ttl, desc = "UDP TTL value", type = int, default = 255;
   END CATEGORY
 
@@ -94,8 +94,8 @@ BEGIN LIBRARY lwip141
     PROPERTY desc = "lwIP TCP options";
     PARAM name = tcp_options, desc = "Is TCP required ?", type = bool, default = true, permit = none;
     PARAM name = lwip_tcp, desc = "Is TCP required ?", type = bool, default = true;
-    PARAM name = tcp_wnd, desc = "TCP Window (bytes), should be 2 x TCP_MSS minimal", type = string, default = (32*TCP_MSS);
-    PARAM name = tcp_snd_buf, desc = "TCP sender buffer space (bytes)", type = string, default = (32*TCP_MSS);
+    PARAM name = tcp_wnd, desc = "TCP Window (bytes), should be 2 x TCP_MSS minimal", type = string, default = (16*TCP_MSS);
+    PARAM name = tcp_snd_buf, desc = "TCP sender buffer space (bytes)", type = string, default = (16*TCP_MSS);
     PARAM name = tcp_mss, desc = "TCP Maximum segment size (bytes)", type = int, default = 1024;
     PARAM name = tcp_ttl, desc = "TCP TTL value", type = int, default = 255;
     PARAM name = tcp_maxrtx, desc = "TCP Maximum retransmission value", type = int, default = 12;
