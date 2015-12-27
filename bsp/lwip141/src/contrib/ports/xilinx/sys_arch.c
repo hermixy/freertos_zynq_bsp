@@ -257,7 +257,8 @@ sys_mbox_trypost (sys_mbox_t *mbox, void *msg)
 	u8_t first;
 
 	/* first obtain mutex to access mbox */
-	if (sem_trywait(&mbox->mutex) < 0) {
+	// if (sem_trywait(&mbox->mutex) < 0) {
+	if (sem_wait(&mbox->mutex) < 0) {
 		return ERR_MEM;
 	}
 

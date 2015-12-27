@@ -539,13 +539,13 @@ proc generate_lwip_opts {libhandle} {
     puts $lwipopts_fd "\#define TCP_MAXRTX $tcp_maxrtx"
     puts $lwipopts_fd "\#define TCP_SYNMAXRTX $tcp_synmaxrtx"
     puts $lwipopts_fd "\#define TCP_QUEUE_OOSEQ $tcp_queue_ooseq"
-    puts $lwipopts_fd "\#define TCP_SND_QUEUELEN (16 * (TCP_SND_BUF)/TCP_MSS)"
+    puts $lwipopts_fd "\#define TCP_SND_QUEUELEN (8 * (TCP_SND_BUF)/TCP_MSS)"
 
     # performance tuning
     puts $lwipopts_fd ""
     # copy from
     # http://asf.atmel.com/docs/3.0.1/common.services.freertos.lwip_example.evk1100/html/opt_8h.html
-    puts $lwipopts_fd "\#define TCP_SNDLOWAT ((TCP_SND_BUF)/2)"
+    puts $lwipopts_fd "\#define TCP_SNDLOWAT ((TCP_SND_BUF)/32)"
     puts $lwipopts_fd "\#define TCP_SNDQUEUELOWAT ((TCP_SND_QUEUELEN)/2)"
     puts $lwipopts_fd "\#define TCP_WND_UPDATE_THRESHOLD ((TCP_WND)/4)"
     # backlogs
