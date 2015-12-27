@@ -86,7 +86,7 @@ BEGIN LIBRARY lwip141
   BEGIN CATEGORY udp_options
     PROPERTY desc = "UDP Options";
     PARAM name = udp_options, desc = "Is UDP required ?", type = bool, default = true, permit = none;
-    PARAM name = lwip_udp, desc = "Is UDP required ?", type = bool, default = true;
+    PARAM name = lwip_udp, desc = "Is UDP required ?", type = bool, default = false;
     PARAM name = udp_ttl, desc = "UDP TTL value", type = int, default = 255;
   END CATEGORY
 
