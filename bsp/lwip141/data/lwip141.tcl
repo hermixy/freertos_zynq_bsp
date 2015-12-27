@@ -401,8 +401,11 @@ proc generate_lwip_opts {libhandle} {
     if {$api_mode == "SOCKET_API"} {
         set sw_proc_handle [get_sw_processor]
         set os_handle [get_cells [get_property HW_INSTANCE $sw_proc_handle]]
-        #set os_name [get_property NAME $os_handle]
+        # set os_name [get_property NAME $os_handle]
         set os_name [get_os]
+        # disable LWIP_RAW
+        puts $lwipopts_fd "\#define NO_SYS 0"
+        puts $lwipopts_fd "\#define LWIP_RAW 0"
         puts [format "os_name is %s" $os_name]
         if { [string compare -nocase "xilkernel" $os_name] == 0} {
             puts $lwipopts_fd "\#define OS_IS_XILKERNEL"
@@ -536,8 +539,21 @@ proc generate_lwip_opts {libhandle} {
     puts $lwipopts_fd "\#define TCP_MAXRTX $tcp_maxrtx"
     puts $lwipopts_fd "\#define TCP_SYNMAXRTX $tcp_synmaxrtx"
     puts $lwipopts_fd "\#define TCP_QUEUE_OOSEQ $tcp_queue_ooseq"
-    puts $lwipopts_fd "\#define TCP_SND_QUEUELEN (16 * TCP_SND_BUF/TCP_MSS)"
-    
+    puts $lwipopts_fd "\#define TCP_SND_QUEUELEN (16 * (TCP_SND_BUF)/TCP_MSS)"
+
+    # performance tuning
+    puts $lwipopts_fd ""
+    # copy from
+    # http://asf.atmel.com/docs/3.0.1/common.services.freertos.lwip_example.evk1100/html/opt_8h.html
+    puts $lwipopts_fd "\#define TCP_SNDLOWAT ((TCP_SND_BUF)/2)"
+    puts $lwipopts_fd "\#define TCP_SNDQUEUELOWAT ((TCP_SND_QUEUELEN)/2)"
+    puts $lwipopts_fd "\#define TCP_WND_UPDATE_THRESHOLD ((TCP_WND)/4)"
+    # backlogs
+    puts $lwipopts_fd "\#define TCP_LISTEN_BACKLOG 0"
+    puts $lwipopts_fd "\#define TCP_DEFAULT_LISTEN_BACKLOG 0xFF"
+    # as we are using lwip-1.4.0 or lwip-1.4.1
+    puts $lwipopts_fd "\#define LWIP_CHECKSUM_ON_COPY 1"
+    puts $lwipopts_fd ""
     
     if {$proctype != "ps7_cortexa9" || $use_axieth_on_zynq == 1} {
         set tx_full_csum_temp [get_property CONFIG.tcp_ip_tx_checksum_offload $libhandle]

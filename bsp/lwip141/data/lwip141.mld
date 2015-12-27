@@ -10,8 +10,8 @@ BEGIN LIBRARY lwip141
   OPTION VERSION = 1.1;
   OPTION NAME = lwip141;
 
-  PARAM name = api_mode, desc = "Mode of operation for lwIP (RAW API/Sockets API)", type = enum, values = ("RAW API" = RAW_API, "SOCKET API" = SOCKET_API), default = RAW_API;
-  PARAM name = socket_mode_thread_prio, desc = "Priority of threads in socket mode", type = int, default = 2;
+  PARAM name = api_mode, desc = "Mode of operation for lwIP (RAW API/Sockets API)", type = enum, values = ("RAW API" = RAW_API, "SOCKET API" = SOCKET_API), default = SOCKET_API;
+  PARAM name = socket_mode_thread_prio, desc = "Priority of threads in socket mode", type = int, default = 3;
   PARAM name = use_axieth_on_zynq, desc = "Option if set to 1 ensures axiethernet adapter being used in Zynq. Valid only for Zynq", type = int, default = 0;
 
   BEGIN CATEGORY temac_adapter_options
@@ -32,8 +32,8 @@ BEGIN LIBRARY lwip141
   BEGIN CATEGORY lwip_memory_options
     PROPERTY desc = "lwIP memory options"
     PARAM name = lwip_memory_options, desc = "Options controlling lwIP memory usage"
-    PARAM name = mem_size, desc = "Size of the heap memory (bytes).", type = string, default = 0x20000;
-    PARAM name = memp_n_pbuf, desc = "Number of memp struct pbufs. Set this high if application sends lot of data out of ROM", type = int, default = 16;
+    PARAM name = mem_size, desc = "Size of the heap memory (bytes).", type = string, default = 0x80000;
+    PARAM name = memp_n_pbuf, desc = "Number of memp struct pbufs. Set this high if application sends lot of data out of ROM. If you are going to transfer large amount of data, set this as high as possible", type = int, default = 1024;
     PARAM name = memp_n_udp_pcb, desc = "Number of active UDP PCBs. One per active UDP connection", type = int, default = 4;
     PARAM name = memp_n_tcp_pcb, desc = "Number of active TCP PCBs. One per active TCP connection", type = int, default = 32;
     PARAM name = memp_n_tcp_pcb_listen, desc = "Number of listening TCP connections", type = int, default = 8;
@@ -48,7 +48,7 @@ BEGIN LIBRARY lwip141
   BEGIN CATEGORY pbuf_options
     PROPERTY desc = "Pbuf Related Options";
     PARAM name = pbuf_options, desc = "Pbuf Options", type = bool, default = true, permit = none;	
-    PARAM name = pbuf_pool_size, desc = "Number of buffers in pbuf pool.", type = int, default = 256;
+    PARAM name = pbuf_pool_size, desc = "Number of buffers in pbuf pool.", type = int, default = 1024;
     PARAM name = pbuf_pool_bufsize, desc = "Size of each pbuf in pbuf pool.", type = int, default = 1700;
     PARAM name = pbuf_link_hlen, desc = "Number of bytes that should be allocated for a link level header.", type = int, default = 16, permit = none;
   END CATEGORY
@@ -67,7 +67,7 @@ BEGIN LIBRARY lwip141
     PARAM name = ip_options, desc = "1 = IP options are allowed (but not parsed). 0 = packets with IP options are dropped", type = int, default = 0, range = (0, 1);    
     PARAM name = ip_reassembly, desc = "Reassemble incoming fragmented IP packets", type = int, default = 1, range = (0, 1);    
     PARAM name = ip_frag, desc = "Fragment outgoing IP packets if their size exceeds MTU", type = int, default = 1, range = (0, 1);
-    PARAM name = ip_reass_max_pbufs, desc = "Reassembly PBUF Queue Length", type = int, default = 128;
+    PARAM name = ip_reass_max_pbufs, desc = "Reassembly PBUF Queue Length", type = int, default = 10;
     PARAM name = ip_frag_max_mtu, desc = "Assumed max MTU on any interface for IP frag buffer", type = int, default = 1500;
     PARAM name = ip_default_ttl, desc = "Global default TTL used by transport layers", type = int, default = 255;
   END CATEGORY
@@ -94,8 +94,8 @@ BEGIN LIBRARY lwip141
     PROPERTY desc = "lwIP TCP options";
     PARAM name = tcp_options, desc = "Is TCP required ?", type = bool, default = true, permit = none;
     PARAM name = lwip_tcp, desc = "Is TCP required ?", type = bool, default = true;
-    PARAM name = tcp_wnd, desc = "TCP Window (bytes), should be 2 x TCP_MSS minimal", type = int, default = 4096;
-    PARAM name = tcp_snd_buf, desc = "TCP sender buffer space (bytes)", type = int, default = 4096;
+    PARAM name = tcp_wnd, desc = "TCP Window (bytes), should be 2 x TCP_MSS minimal", type = string, default = (8*TCP_MSS);
+    PARAM name = tcp_snd_buf, desc = "TCP sender buffer space (bytes)", type = string, default = (8*TCP_MSS);
     PARAM name = tcp_mss, desc = "TCP Maximum segment size (bytes)", type = int, default = 1024;
     PARAM name = tcp_ttl, desc = "TCP TTL value", type = int, default = 255;
     PARAM name = tcp_maxrtx, desc = "TCP Maximum retransmission value", type = int, default = 12;
