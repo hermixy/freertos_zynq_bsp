@@ -1,7 +1,8 @@
-freertos bsp for Zynq (Microzed, Zedboard, etc.)
-================================================
+# Freertos bsp for Zynq (Microzed, Zedboard, etc.)
 
-## features
+*tested on microzed 7010/7020*
+
+## 1. Features
 
 The zynq bsp for freeRTOS, using the cutting-edge version of freeRTOS (currently v8.2.0rc1) and the demos in `CORTEX_A9_Zynq_ZC702` of the official freeRTOS repository.
 
@@ -11,7 +12,7 @@ This bsp aims to illustrate the basis of freertos by porting all demos in offici
 
 The demo files of `CORTEX_A9_Zynq_ZC702` are available from official svn or via [freertos sync at github](https://github.com/cjlano/freertos). The building instructions on ZC702 can be found at the official freeRTOS website [RTOS-Xilinx-Zynq](http://www.freertos.org/RTOS-Xilinx-Zynq.html).
 
-## supported drivers
+## 2. Supported drivers
 
 Currently, the support drivers are :
 - [x] FreeRTOS CLI package,
@@ -22,12 +23,8 @@ TODO list :
 - [ ] board-aware (like LED toggling, buttons etc.,) demos to the package,
 - [ ] matrix algebra package.
 
-## Instructions
+## 3. Instructions
 
 Open SDK, and set repository via `Xilinx Tools`, `Repositories` and add (new) the location of the cloned source code.
 
 Open `File`, `New Project`, add the demos, compile and run.
-
-## changelog
-
-
